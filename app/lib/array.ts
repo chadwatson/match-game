@@ -7,7 +7,7 @@ export function shuffle<A>(xs: A[]) {
   let currentIndex = ys.length;
 
   while (currentIndex != 0) {
-    let randomIndex = Math.floor(Math.random() * currentIndex);
+    const randomIndex = Math.floor(Math.random() * currentIndex);
     currentIndex--;
 
     [ys[currentIndex], ys[randomIndex]] = [ys[randomIndex], ys[currentIndex]];
@@ -26,7 +26,7 @@ export const splitEvery =
     const ys = [] as A[][];
 
     let currentRow = [];
-    for (let x of xs) {
+    for (const x of xs) {
       currentRow.push(x);
 
       if (currentRow.length === amount) {

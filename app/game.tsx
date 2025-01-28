@@ -65,7 +65,7 @@ export default function Game(props: {
       setPlayerOneCards(set.join(guesses));
     }
     setGuesses(new Set());
-  }, [guesses, setPlayerOneCards, setPlayerTwoCards]);
+  }, [guesses, currentPlayer, setPlayerOneCards, setPlayerTwoCards]);
 
   const switchPlayer = useCallback(() => {
     setGuesses(new Set());
@@ -85,7 +85,7 @@ export default function Game(props: {
     return () => {
       document.removeEventListener("keyup", listener);
     };
-  }, [matchFound, guessesMade, collectCards]);
+  }, [matchFound, guessesMade, collectCards, switchPlayer]);
 
   return (
     <form className="w-screen h-screen">
