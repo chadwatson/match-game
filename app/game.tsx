@@ -1,5 +1,4 @@
 "use client";
-import Image from "next/image";
 import { use, useCallback, useEffect, useState } from "react";
 import * as set from "./lib/set";
 import { Deck, GameDifficulty } from "./lib/types";
