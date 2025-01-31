@@ -1,13 +1,14 @@
 "use client";
 import { use, useCallback, useEffect, useState } from "react";
-import * as set from "./lib/set";
-import { Deck, GameDifficulty } from "./lib/types";
+import * as set from "../lib/set";
+import { Deck, GameDifficulty } from "../lib/types";
 import {
   ArrowPathIcon,
   ArrowPathRoundedSquareIcon,
   CheckIcon,
   StarIcon,
-} from "./icons";
+} from "../icons";
+import { useRouter } from "next/navigation";
 
 type Guesses = Set<number>;
 
@@ -44,6 +45,7 @@ export default function Game(props: {
   deck: Promise<Deck>;
   difficulty: GameDifficulty;
 }) {
+  const router = useRouter();
   const deck = use(props.deck);
   const [guesses, setGuesses] = useState<Guesses>(new Set());
   const [currentPlayer, setCurrentPlayer] = useState<PlayerNumber>(1);
@@ -172,7 +174,7 @@ export default function Game(props: {
             className="ml-2 p-2 text-gray-800 hover:text-gray-300 active:text-gray-100"
             onClick={() => {
               if (confirm("Are you sure you want to start a new game?")) {
-                window.location.reload();
+                router.push("/");
               }
             }}
           >
