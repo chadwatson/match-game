@@ -2,6 +2,12 @@
 import { use, useCallback, useEffect, useState } from "react";
 import * as set from "./lib/set";
 import { Deck, GameDifficulty } from "./lib/types";
+import {
+  ArrowPathIcon,
+  ArrowPathRoundedSquareIcon,
+  CheckIcon,
+  StarIcon,
+} from "./icons";
 
 type Guesses = Set<number>;
 
@@ -52,6 +58,8 @@ export default function Game(props: {
   const guessesMade = guesses.size >= 2;
   const foundCards = set.join(playerTwoCards)(playerOneCards);
   const gameOver = foundCards.size === deck.length;
+  const playerOneWins = gameOver && playerOneCards.size > playerTwoCards.size;
+  const playerTwoWins = gameOver && playerOneCards.size < playerTwoCards.size;
 
   const collectCards = useCallback(() => {
     if (currentPlayer === 2) {
@@ -95,20 +103,11 @@ export default function Game(props: {
                     : "bg-gray-800 text-gray-400"
                 }`}
               >
-                {currentPlayer === 1 && (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    className="size-6"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                )}
+                {playerOneWins ? (
+                  <CheckIcon className="size-6" />
+                ) : currentPlayer === 1 ? (
+                  <StarIcon className="size-6" />
+                ) : null}
               </div>
               <div>
                 <div className="leading-none text-sm text-gray-500">
@@ -127,20 +126,11 @@ export default function Game(props: {
                     : "bg-gray-800 text-gray-400"
                 }`}
               >
-                {currentPlayer === 2 && (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    className="size-6"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M10.788 3.21c.448-1.077 1.976-1.077 2.424 0l2.082 5.006 5.404.434c1.164.093 1.636 1.545.749 2.305l-4.117 3.527 1.257 5.273c.271 1.136-.964 2.033-1.96 1.425L12 18.354 7.373 21.18c-.996.608-2.231-.29-1.96-1.425l1.257-5.273-4.117-3.527c-.887-.76-.415-2.212.749-2.305l5.404-.434 2.082-5.005Z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                )}
+                {playerTwoWins ? (
+                  <CheckIcon className="size-6" />
+                ) : currentPlayer === 2 ? (
+                  <StarIcon className="size-6" />
+                ) : null}
               </div>
               <div>
                 <div className="leading-none text-sm text-gray-500">
@@ -158,20 +148,7 @@ export default function Game(props: {
                 onClick={collectCards}
               >
                 <span className="flex items-center">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="size-5 mr-1"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="m4.5 12.75 6 6 9-13.5"
-                    />
-                  </svg>
+                  <CheckIcon className="size-5 mr-1" />
                   <span>Match Found!</span>
                 </span>
               </button>
@@ -182,20 +159,7 @@ export default function Game(props: {
                 onClick={switchPlayer}
               >
                 <span className="flex items-center">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="size-5 mr-1"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"
-                    />
-                  </svg>
+                  <ArrowPathIcon className="size-5 mr-1" />
                   <span>Switch</span>
                 </span>
               </button>
@@ -212,20 +176,7 @@ export default function Game(props: {
               }
             }}
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="size-6"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M19.5 12c0-1.232-.046-2.453-.138-3.662a4.006 4.006 0 0 0-3.7-3.7 48.678 48.678 0 0 0-7.324 0 4.006 4.006 0 0 0-3.7 3.7c-.017.22-.032.441-.046.662M19.5 12l3-3m-3 3-3-3m-12 3c0 1.232.046 2.453.138 3.662a4.006 4.006 0 0 0 3.7 3.7 48.656 48.656 0 0 0 7.324 0 4.006 4.006 0 0 0 3.7-3.7c.017-.22.032-.441.046-.662M4.5 12l3 3m-3-3-3 3"
-              />
-            </svg>
+            <ArrowPathRoundedSquareIcon className="size-6" />
           </button>
         </div>
       </header>
@@ -234,9 +185,9 @@ export default function Game(props: {
           <div className="w-full h-full flex justify-center items-center">
             <div className="text-center">
               <h1 className="mb-4 text-4xl text-white font-bold text-center">
-                {playerTwoCards.size > playerOneCards.size
+                {playerTwoWins
                   ? "Player 2 wins!"
-                  : playerTwoCards.size < playerOneCards.size
+                  : playerOneWins
                   ? "Player 1 wins!"
                   : "It's a tie!"}
               </h1>
@@ -248,20 +199,7 @@ export default function Game(props: {
                 }}
               >
                 <span className="flex items-center">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="size-6 mr-2"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"
-                    />
-                  </svg>
+                  <ArrowPathIcon className="size-6 mr-2" />
                   Play again
                 </span>
               </button>
