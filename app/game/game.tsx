@@ -144,36 +144,36 @@ export default function Game(props: {
                 </div>
               </div>
             </div>
-            {matchFound ? (
-              <button
-                type="button"
-                className="cursor-pointer rounded-full inline-block py-1 pl-3 pr-4 font-bold bg-emerald-700 text-white text-nowrap hover:bg-emerald-800 border-b-4 border-emerald-800"
-                onClick={collectCards}
-              >
-                <span className="flex items-center">
-                  <CheckIcon className="size-5 mr-1" />
-                  <span>Match Found!</span>
-                </span>
-              </button>
-            ) : guessesMade ? (
-              <button
-                type="button"
-                className="rounded-full inline-block py-1 pl-3 pr-4 font-bold bg-violet-800 text-white text-nowrap hover:bg-violet-900 border-b-4 border-violet-900"
-                onClick={switchPlayer}
-              >
-                <span className="flex items-center">
-                  <ArrowPathIcon className="size-5 mr-1" />
-                  <span>Switch</span>
-                </span>
-              </button>
-            ) : null}
           </div>
         </div>
         <div className="flex-1 items-end text-right">
+          {matchFound ? (
+            <button
+              type="button"
+              className="cursor-pointer rounded-full inline-block py-1 pl-3 pr-4 font-bold bg-emerald-700 text-sm text-white text-nowrap hover:bg-emerald-800 border-b-4 border-emerald-800"
+              onClick={collectCards}
+            >
+              <span className="flex items-center">
+                <CheckIcon className="size-5 mr-1" />
+                <span>Match Found!</span>
+              </span>
+            </button>
+          ) : guessesMade ? (
+            <button
+              type="button"
+              className="rounded-full inline-block py-1 pl-3 pr-4 cursor-pointer font-bold bg-violet-800 text-white text-sm text-nowrap hover:bg-violet-900 border-b-4 border-violet-900"
+              onClick={switchPlayer}
+            >
+              <span className="flex items-center">
+                <ArrowPathIcon className="size-5 mr-1" />
+                <span>Switch</span>
+              </span>
+            </button>
+          ) : null}
           {!gameOver && (
             <button
               type="button"
-              className="inline-block rounded-full cursor-pointer px-3 py-1 text-sm font-bold bg-gray-50 text-gray-700 hover:bg-gray-200 border-b-4 border-gray-400 hover:text-gray-900 active:border-0"
+              className="inline-block rounded-full cursor-pointer px-3 py-1 ml-4 text-sm font-bold bg-gray-50 text-gray-700 hover:bg-gray-200 border-b-4 border-gray-400 hover:text-gray-900 active:border-0"
               onClick={() => {
                 if (confirm("Are you sure you want to start a new game?")) {
                   router.push("/");

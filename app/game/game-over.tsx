@@ -1,10 +1,8 @@
 "use client";
 import Link from "next/link";
 import { ArrowPathIcon, SparklesIcon } from "../icons";
-import { useRouter } from "next/navigation";
 
 export default function GameOver(props: { winner: number }) {
-  const router = useRouter();
   const { winner } = props;
 
   return (
@@ -22,7 +20,7 @@ export default function GameOver(props: { winner: number }) {
             type="button"
             className="inline-block rounded-full py-2 px-5 mr-3 cursor-pointer text-xl font-bold bg-lime-600 text-white hover:bg-lime-700 border-b-4 border-lime-700 hover:border-lime-900 active:border-0"
             onClick={() => {
-              router.refresh();
+              window.location.reload();
             }}
           >
             <span className="flex items-center justify-center">
