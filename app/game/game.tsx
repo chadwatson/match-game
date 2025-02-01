@@ -108,7 +108,7 @@ export default function Game(props: {
               >
                 {playerOneWins ? (
                   <CheckIcon className="size-6" />
-                ) : currentPlayer === 1 ? (
+                ) : !gameOver && currentPlayer === 1 ? (
                   <StarIcon className="size-6" />
                 ) : null}
               </div>
@@ -131,7 +131,7 @@ export default function Game(props: {
               >
                 {playerTwoWins ? (
                   <CheckIcon className="size-6" />
-                ) : currentPlayer === 2 ? (
+                ) : !gameOver && currentPlayer === 2 ? (
                   <StarIcon className="size-6" />
                 ) : null}
               </div>
