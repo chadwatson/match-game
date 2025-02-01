@@ -14,3 +14,8 @@ export type GameParams = {
   theme: GameTheme;
   difficulty: GameDifficulty;
 };
+
+export type GamePageSearchParams = {
+  theme?: GameTheme | "" | undefined;
+  difficulty?: GameDifficulty | "" | undefined;
+};

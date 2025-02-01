@@ -1,15 +1,11 @@
 "use client";
-import { use, useCallback, useEffect, useState } from "react";
+import { Suspense, use, useCallback, useEffect, useState } from "react";
 import * as set from "../lib/set";
 import { Deck, GameDifficulty } from "../lib/types";
-import {
-  ArrowPathIcon,
-  ArrowPathRoundedSquareIcon,
-  CheckIcon,
-  StarIcon,
-} from "../icons";
+import { ArrowPathIcon, CheckIcon, SparklesIcon, StarIcon } from "../icons";
 import { useRouter } from "next/navigation";
 import { preloadImage } from "../lib/image";
+import GameOver from "./game-over";
 
 type Guesses = Set<number>;
 
@@ -105,7 +101,7 @@ export default function Game(props: {
             <div className="mr-4 pr-6 flex items-center">
               <div
                 className={`rounded w-10 h-10 mr-3 flex items-center justify-center font-bold text-2xl ${
-                  currentPlayer === 1
+                  playerOneWins || (!gameOver && currentPlayer === 1)
                     ? "bg-blue-700 text-white"
                     : "bg-gray-800 text-gray-400"
                 }`}
@@ -117,10 +113,10 @@ export default function Game(props: {
                 ) : null}
               </div>
               <div>
-                <div className="leading-none text-sm text-gray-500">
+                <div className="leading-none text-sm text-gray-500 whitespace-nowrap">
                   Player 1
                 </div>
-                <div className="leading-none text-2xl text-white font-bold">
+                <div className="leading-none text-2xl text-white font-bold whitespace-nowrap">
                   {playerOneCards.size}
                 </div>
               </div>
@@ -128,7 +124,7 @@ export default function Game(props: {
             <div className="mr-4 pr-6 flex items-center">
               <div
                 className={`rounded w-10 h-10 mr-3 flex items-center justify-center font-bold text-2xl ${
-                  currentPlayer === 2
+                  playerTwoWins || (!gameOver && currentPlayer === 2)
                     ? "bg-red-700 text-white"
                     : "bg-gray-800 text-gray-400"
                 }`}
@@ -140,10 +136,10 @@ export default function Game(props: {
                 ) : null}
               </div>
               <div>
-                <div className="leading-none text-sm text-gray-500">
+                <div className="leading-none text-sm text-gray-500 whitespace-nowrap">
                   Player 2
                 </div>
-                <div className="leading-none text-2xl text-white font-bold">
+                <div className="leading-none text-2xl text-white font-bold whitespace-nowrap">
                   {playerTwoCards.size}
                 </div>
               </div>
@@ -151,7 +147,7 @@ export default function Game(props: {
             {matchFound ? (
               <button
                 type="button"
-                className="rounded-full inline-block py-1 pl-3 pr-4 font-bold bg-emerald-700 text-white text-nowrap hover:bg-emerald-800 border-b-4 border-emerald-800"
+                className="cursor-pointer rounded-full inline-block py-1 pl-3 pr-4 font-bold bg-emerald-700 text-white text-nowrap hover:bg-emerald-800 border-b-4 border-emerald-800"
                 onClick={collectCards}
               >
                 <span className="flex items-center">
@@ -174,44 +170,29 @@ export default function Game(props: {
           </div>
         </div>
         <div className="flex-1 items-end text-right">
-          <button
-            type="button"
-            className="ml-2 p-2 text-gray-800 hover:text-gray-300 active:text-gray-100"
-            onClick={() => {
-              if (confirm("Are you sure you want to start a new game?")) {
-                router.push("/");
-              }
-            }}
-          >
-            <ArrowPathRoundedSquareIcon className="size-6" />
-          </button>
+          {!gameOver && (
+            <button
+              type="button"
+              className="inline-block rounded-full cursor-pointer px-3 py-1 text-sm font-bold bg-gray-50 text-gray-700 hover:bg-gray-200 border-b-4 border-gray-400 hover:text-gray-900 active:border-0"
+              onClick={() => {
+                if (confirm("Are you sure you want to start a new game?")) {
+                  router.push("/");
+                }
+              }}
+            >
+              <span className="flex items-center justify-center">
+                <SparklesIcon className="size-5 mr-1" />
+                New Game
+              </span>
+            </button>
+          )}
         </div>
       </header>
       <div className="w-screen h-screen pt-16 p-6">
         {gameOver ? (
-          <div className="w-full h-full flex justify-center items-center">
-            <div className="text-center">
-              <h1 className="mb-4 text-4xl text-white font-bold text-center">
-                {playerTwoWins
-                  ? "Player 2 wins!"
-                  : playerOneWins
-                  ? "Player 1 wins!"
-                  : "It's a tie!"}
-              </h1>
-              <button
-                type="button"
-                className="rounded-full inline-block py-2 px-5 text-xl font-bold bg-lime-600 text-white hover:bg-lime-700 border-b-4 border-lime-700 hover:border-lime-900 active:border-0"
-                onClick={() => {
-                  window.location.reload();
-                }}
-              >
-                <span className="flex items-center">
-                  <ArrowPathIcon className="size-6 mr-2" />
-                  Play again
-                </span>
-              </button>
-            </div>
-          </div>
+          <Suspense>
+            <GameOver winner={playerOneWins ? 1 : 2} />
+          </Suspense>
         ) : (
           <div
             className={`w-full h-full max-w-full max-h-full grid gap-6 ${gridClassName(

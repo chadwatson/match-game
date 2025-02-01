@@ -1,17 +1,12 @@
 import json from "../images.json";
 import { createApi } from "unsplash-js";
 import * as array from "../lib/array";
-import { GameParams, GameDifficulty, GameTheme } from "../lib/types";
+import { GameParams, GameDifficulty, GamePageSearchParams } from "../lib/types";
 import Game from "./game";
 
 const unsplashApi = createApi({
   accessKey: process.env.UNSPLASH_ACCESS_KEY as string,
 });
-
-type SearchParams = {
-  theme?: GameTheme | "" | undefined;
-  difficulty?: GameDifficulty | "" | undefined;
-};
 
 function imagesPerDifficulty(difficulty: GameDifficulty) {
   switch (difficulty) {
@@ -47,7 +42,7 @@ async function fetchImages(params: GameParams) {
   }
 }
 
-async function initGame(searchParamsAsync: Promise<SearchParams>) {
+async function initGame(searchParamsAsync: Promise<GamePageSearchParams>) {
   const searchParams = await searchParamsAsync;
   const gameParams = {
     difficulty: searchParams.difficulty || "medium",
@@ -62,7 +57,7 @@ async function initGame(searchParamsAsync: Promise<SearchParams>) {
 }
 
 export default async function GamePage(props: {
-  searchParams: Promise<SearchParams>;
+  searchParams: Promise<GamePageSearchParams>;
 }) {
   const difficulty = "medium";
   const deck = initGame(props.searchParams);
