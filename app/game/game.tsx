@@ -9,6 +9,7 @@ import {
   StarIcon,
 } from "../icons";
 import { useRouter } from "next/navigation";
+import { preloadImage } from "../lib/image";
 
 type Guesses = Set<number>;
 
@@ -76,6 +77,10 @@ export default function Game(props: {
     setGuesses(new Set());
     setCurrentPlayer((currentPlayer) => (currentPlayer === 1 ? 2 : 1));
   }, [setGuesses, setCurrentPlayer]);
+
+  useEffect(() => {
+    deck.forEach(preloadImage);
+  }, [props.deck]);
 
   useEffect(() => {
     function listener(event: KeyboardEvent) {

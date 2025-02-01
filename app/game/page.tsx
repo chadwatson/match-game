@@ -39,7 +39,7 @@ async function fetchImages(params: GameParams) {
           count: imagesPerDifficulty(params.difficulty),
         });
         const items = Array.isArray(response) ? response : [];
-        return items.map((item) => item.urls?.small) ?? [];
+        return items.map((item) => item.urls?.small);
       } catch {
         return [];
       }
