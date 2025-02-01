@@ -34,12 +34,12 @@ async function fetchImages(params: GameParams) {
         .slice(0, imagesPerDifficulty(params.difficulty));
     default: {
       try {
-        const { response } = await unsplashApi.search.getPhotos({
+        const { response } = await unsplashApi.photos.getRandom({
           query: params.theme,
-          page: 1,
-          perPage: imagesPerDifficulty(params.difficulty),
+          count: imagesPerDifficulty(params.difficulty),
         });
-        return response?.results.map((item) => item.urls?.small) ?? [];
+        const items = Array.isArray(response) ? response : [];
+        return items.map((item) => item.urls?.small) ?? [];
       } catch {
         return [];
       }

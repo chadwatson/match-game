@@ -74,6 +74,7 @@ function GameThemeOption(props: {
         pathname: "/game",
         query: { theme, difficulty },
       }}
+      className="active:opacity-80"
     >
       <div className="relative rounded-lg overflow-hidden">
         <Image
