@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { ArrowPathIcon, SparklesIcon } from "../icons";
+import { ArrowPathIcon, SparklesIcon } from "@heroicons/react/24/outline";
 
 export default function GameOver(props: { winner: number }) {
   const { winner } = props;

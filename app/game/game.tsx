@@ -2,7 +2,12 @@
 import { Suspense, use, useCallback, useEffect, useState } from "react";
 import * as set from "../lib/set";
 import { Deck, GameDifficulty } from "../lib/types";
-import { ArrowPathIcon, CheckIcon, SparklesIcon, StarIcon } from "../icons";
+import {
+  ArrowPathIcon,
+  CheckIcon,
+  SparklesIcon,
+  StarIcon,
+} from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
 import { preloadImage } from "../lib/image";
 import GameOver from "./game-over";
