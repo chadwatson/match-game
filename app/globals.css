@@ -15,5 +15,6 @@
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: InterVariable, system-ui, sans-serif;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
 }
