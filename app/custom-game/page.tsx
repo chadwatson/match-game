@@ -3,6 +3,8 @@
 import { ChangeEventHandler, useState } from "react";
 import { PhotoIcon } from "@heroicons/react/24/outline";
 import { always } from "../lib/function";
+import Button from "../components/button";
+import { CheckIcon } from "@heroicons/react/24/solid";
 
 function SelectedItem(props: { file: File }) {
   const [src] = useState(() => URL.createObjectURL(props.file));
@@ -27,7 +29,7 @@ function UploadInput(props: {
 }) {
   return (
     <label
-      className="flex items-center justify-center w-full h-full rounded-lg border-1 border-dashed cursor-pointer px-4 py-8 opacity-80 hover:opacity-100 focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 focus-within:outline-hidden"
+      className="flex items-center justify-center w-full h-full rounded-lg border-1 border-dashed cursor-pointer px-4 py-8 opacity-80 hover:opacity-100 focus-within:ring-2 focus-within:ring-violet-600 focus-within:ring-offset-2 focus-within:outline-hidden"
       htmlFor="image-upload"
       title="Select photos"
     >
@@ -42,7 +44,7 @@ function UploadInput(props: {
         />
         <PhotoIcon className="size-12 mx-auto" />
         <div className="mt-4 flex text-sm/6 text-gray-50">
-          <span className="relative font-semibold text-indigo-400 hover:text-indigo-500">
+          <span className="relative font-semibold text-violet-400 hover:text-violet-500">
             <span>Upload a file</span>
           </span>
           <p className="pl-1">or drag and drop</p>
@@ -91,32 +93,47 @@ export default function CustomGamePage() {
         event.preventDefault();
       }}
     >
-      {selectedItems.size > 0 ? (
-        <ul className="grid grid-cols-8 grid-rows-8 gap-6">
-          <li className="col-span-3">
-            <UploadInput
-              onChange={async (event) => {
-                const { files } = event.target;
-                if (files) {
-                  processSelectedFiles(files);
-                }
-              }}
-            />
-          </li>
-          {[...selectedItems].map((file, index) => (
-            <SelectedItem key={`${file.name}-${index}`} file={file} />
-          ))}
-        </ul>
-      ) : (
-        <UploadInput
-          onChange={async (event) => {
-            const { files } = event.target;
-            if (files) {
-              processSelectedFiles(files);
-            }
-          }}
-        />
-      )}
+      <div className="mx-auto max-w-7xl">
+        <header className="mb-4 lg:flex lg:items-center lg:justify-between">
+          <div className="min-w-0 flex-1 flex items-center">
+            <h1 className="text-2xl/7 font-bold text-gray-900 mr-4 dark:text-white sm:truncate sm:text-3xl sm:tracking-tight">
+              Make your own deck
+            </h1>
+            <div className="bg-lime-700 text-white px-2 py-1 text-sm font-bold rounded-full">
+              {selectedItems.size} / 18
+            </div>
+          </div>
+          <div className="mt-5 flex lg:mt-0 lg:ml-4">
+            <Button icon={<Button.Icon Component={CheckIcon} />}>Let's play!</Button>
+          </div>
+        </header>
+        {selectedItems.size > 0 ? (
+          <ul className="grid grid-cols-8 grid-rows-8 gap-6">
+            <li className="col-span-3">
+              <UploadInput
+                onChange={async (event) => {
+                  const { files } = event.target;
+                  if (files) {
+                    processSelectedFiles(files);
+                  }
+                }}
+              />
+            </li>
+            {[...selectedItems].map((file, index) => (
+              <SelectedItem key={`${file.name}-${index}`} file={file} />
+            ))}
+          </ul>
+        ) : (
+          <UploadInput
+            onChange={async (event) => {
+              const { files } = event.target;
+              if (files) {
+                processSelectedFiles(files);
+              }
+            }}
+          />
+        )}
+      </div>
     </div>
   );
 }
