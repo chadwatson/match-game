@@ -6,13 +6,6 @@ export const metadata: Metadata = {
   description: "A matching game!",
 };
 
-export const viewport: Viewport = {
-  width: "device-width",
-  initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
-};
-
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -20,9 +13,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="antialiased overflow-hidden w-screen h-screen select-none">
-        {children}
-      </body>
+      <body className="antialiased">{children}</body>
     </html>
   );
 }

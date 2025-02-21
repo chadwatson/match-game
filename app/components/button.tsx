@@ -20,7 +20,7 @@ function Button(
   return (
     <button
       {...rest}
-      className={`inline-flex items-center rounded-md bg-violet-600 px-3 py-2 text-sm font-semibold text-white ring-1 shadow-xs cursor-pointer ring-violet-500 ring-inset hover:bg-violet-700 hover:ring-violet-600 active:bg-violet-800 active:text-violet-200 ${className}`}
+      className={`inline-flex items-center rounded-full bg-violet-600 px-3 py-2 text-sm font-semibold text-white shadow-lg shadow-violet-500/50 active:shadow-md ring-1 enabled:cursor-pointer ring-violet-500 ring-inset enabled:hover:bg-violet-700 enabled:hover:ring-violet-600 enabled:active:bg-violet-800 enabled:active:text-violet-200 ${className}`}
     >
       {props.icon}
       {props.children}
