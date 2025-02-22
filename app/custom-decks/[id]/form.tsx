@@ -76,7 +76,7 @@ const fileIsValidType = (file: File) => validFileTypes().has(file.type);
 
 const MIN_FILES_COUNT = always(18);
 
-export default function CustomGameForm(props: {
+export default function CustomDeckForm(props: {
   customDeck: Promise<CustomDeckRecord | undefined>;
 }) {
   const customDeck = use(props.customDeck);

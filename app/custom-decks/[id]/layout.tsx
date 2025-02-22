@@ -5,7 +5,7 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-export default function CustomGameLayout({
+export default function CustomDeckLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;

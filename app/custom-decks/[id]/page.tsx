@@ -1,5 +1,5 @@
 import { neon } from "@neondatabase/serverless";
-import CustomGameForm from "./form";
+import CustomDeckForm from "./form";
 import { CustomDeckRecord } from "@/app/lib/types";
 
 type Params = {
@@ -13,8 +13,8 @@ async function fetchCustomDeck(params: Promise<Params>) {
   return customDeck as CustomDeckRecord | undefined;
 }
 
-export default async function CustomGamePage(props: {
+export default async function CustomDeckPage(props: {
   params: Promise<Params>;
 }) {
-  return <CustomGameForm customDeck={fetchCustomDeck(props.params)} />;
+  return <CustomDeckForm customDeck={fetchCustomDeck(props.params)} />;
 }
