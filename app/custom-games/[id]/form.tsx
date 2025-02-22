@@ -2,10 +2,11 @@
 
 import { ChangeEventHandler, use, useState } from "react";
 import { PhotoIcon, PlusIcon, MinusIcon } from "@heroicons/react/24/outline";
-import * as set from "../lib/set";
-import { always } from "../lib/function";
-import Button from "../components/button";
+import * as set from "@/app/lib/set";
+import { always } from "@/app/lib/function";
+import Button from "@/app/components/button";
 import { CheckIcon } from "@heroicons/react/24/solid";
+import { CustomDeckRecord } from "@/app/lib/types";
 
 function SelectedItem(props: { file: File; onRemove: (file: File) => void }) {
   const [src] = useState(() => URL.createObjectURL(props.file));
@@ -76,9 +77,9 @@ const fileIsValidType = (file: File) => validFileTypes().has(file.type);
 const MIN_FILES_COUNT = always(18);
 
 export default function CustomGameForm(props: {
-  params: Promise<{ id: string }>;
+  customDeck: Promise<CustomDeckRecord | undefined>;
 }) {
-  const { id } = use(props.params);
+  const customDeck = use(props.customDeck);
   const [files, setFiles] = useState<Set<File>>(new Set());
 
   async function processSelectedFiles(selectedFiles: FileList) {
@@ -144,6 +145,7 @@ export default function CustomGameForm(props: {
                 id="name"
                 name="name"
                 className="block w-full rounded-md bg-gray-900 px-3 py-1.5 text-base text-gray-900 dark:text-white outline-1 -outline-offset-1 outline-gray-700 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                defaultValue={customDeck?.name ?? ""}
               />
             </div>
           </div>
@@ -165,6 +167,7 @@ export default function CustomGameForm(props: {
                 id="description"
                 name="description"
                 className="block w-full rounded-md bg-gray-900 px-3 py-1.5 text-base text-gray-900 dark:text-white outline-1 -outline-offset-1 outline-gray-700 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+                defaultValue={customDeck?.description ?? ""}
               />
             </div>
           </div>

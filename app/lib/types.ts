@@ -19,3 +19,12 @@ export type GamePageSearchParams = {
   theme?: GameTheme | "" | undefined;
   difficulty?: GameDifficulty | "" | undefined;
 };
+
+export type CustomDeckRecord = {
+  id: number;
+  name: string;
+  description: string | null;
+  created_at: string;
+  updated_at: string;
+  user_id: number;
+};

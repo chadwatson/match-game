@@ -1,7 +1,11 @@
-import json from "../images.json";
+import json from "@/app/images.json";
 import { createApi } from "unsplash-js";
-import * as array from "../lib/array";
-import { GameParams, GameDifficulty, GamePageSearchParams } from "../lib/types";
+import * as array from "@/app/lib/array";
+import {
+  GameParams,
+  GameDifficulty,
+  GamePageSearchParams,
+} from "@/app/lib/types";
 import Game from "./game";
 
 const unsplashApi = createApi({

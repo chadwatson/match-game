@@ -1,7 +1,7 @@
 "use client";
 import { Suspense, use, useCallback, useEffect, useState } from "react";
-import * as set from "../lib/set";
-import { Deck, GameDifficulty } from "../lib/types";
+import * as set from "@/app/lib/set";
+import { Deck, GameDifficulty } from "@/app/lib/types";
 import {
   ArrowPathIcon,
   CheckIcon,
@@ -9,7 +9,7 @@ import {
   StarIcon,
 } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
-import { preloadImage } from "../lib/image";
+import { preloadImage } from "@/app/lib/image";
 import GameOver from "./game-over";
 
 type Guesses = Set<number>;
