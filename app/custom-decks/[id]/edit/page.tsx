@@ -1,7 +1,6 @@
 import { neon } from "@neondatabase/serverless";
 import CustomDeckForm from "./form";
 import { CustomDeckRecord } from "@/app/lib/types";
-import { currentUser } from "@clerk/nextjs/server";
 
 type Params = {
   id: string;
@@ -17,7 +16,5 @@ async function fetchCustomDeck(params: Promise<Params>) {
 export default async function CustomDeckPage(props: {
   params: Promise<Params>;
 }) {
-  const user = await currentUser();
-  console.log(user);
   return <CustomDeckForm customDeck={fetchCustomDeck(props.params)} />;
 }

@@ -55,18 +55,6 @@ export default function Home() {
             imgSrc={cars}
             title="Cars"
           />
-          <Link
-            title="Make your own!"
-            href="/custom-game"
-            className="active:opacity-80"
-          >
-            <div className="relative rounded-lg overflow-hidden flex items-center justify-center">
-              <div className="flex items-center">
-                <ArrowUpTrayIcon className="size-6 mr-2" />
-                <span className="">Make your own!</span>
-              </div>
-            </div>
-          </Link>
         </div>
       </div>
     </div>

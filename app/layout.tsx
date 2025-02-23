@@ -1,4 +1,4 @@
-import type { Metadata, Viewport } from "next";
+import type { Metadata } from "next";
 import {
   ClerkProvider,
   SignInButton,
@@ -8,13 +8,15 @@ import {
   UserButton,
 } from "@clerk/nextjs";
 import "./globals.css";
+import MakeCustomDeckButton from "./components/make-custom-deck-button";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Match & Match",
   description: "A matching game!",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -24,8 +26,11 @@ export default function RootLayout({
       <html lang="en">
         <body className="antialiased">
           <header className="flex justify-between items-center p-4 h-16">
-            <h1 className="font-bold text-lg">Match & Match</h1>
+            <h1 className="font-bold text-lg">
+              <Link href="/">Match & Match</Link>
+            </h1>
             <div className="flex justify-end items-center gap-4">
+              <MakeCustomDeckButton />
               <SignedOut>
                 <SignInButton />
                 <SignUpButton />
