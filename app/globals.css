@@ -17,4 +17,5 @@ body {
   background: var(--background);
   font-family: InterVariable, system-ui, sans-serif;
   font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  min-height: 100vh;
 }

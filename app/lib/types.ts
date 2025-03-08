@@ -16,15 +16,28 @@ export type GameParams = {
 };
 
 export type GamePageSearchParams = {
-  theme?: GameTheme | "" | undefined;
+  type?: "deck" | "unsplash";
+  deckId?: string;
   difficulty?: GameDifficulty | "" | undefined;
 };
 
-export type CustomDeckRecord = {
+export type DeckRecord = {
   id: number;
   name: string;
   description: string | null;
   created_at: string;
   updated_at: string;
   user_id: number;
+  image_urls: string[];
+  featured: boolean | null;
+  play_count: number | null;
+};
+
+export type UserRecord = {
+  id: number;
+  first_name: string | null;
+  last_name: string | null;
+  created_at: string;
+  updated_at: string;
+  clerk_user_id: string;
 };

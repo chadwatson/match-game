@@ -2,15 +2,11 @@
 import { Suspense, use, useCallback, useEffect, useState } from "react";
 import * as set from "@/app/lib/set";
 import { Deck, GameDifficulty } from "@/app/lib/types";
-import {
-  ArrowPathIcon,
-  CheckIcon,
-  SparklesIcon,
-  StarIcon,
-} from "@heroicons/react/24/outline";
-import { useRouter } from "next/navigation";
+import { ArrowPathIcon, CheckIcon } from "@heroicons/react/24/outline";
 import { preloadImage } from "@/app/lib/image";
 import GameOver from "./game-over";
+import Button from "./button";
+import { StarIcon } from "@heroicons/react/24/solid";
 
 type Guesses = Set<number>;
 
@@ -47,7 +43,6 @@ export default function Game(props: {
   deck: Promise<Deck>;
   difficulty: GameDifficulty;
 }) {
-  const router = useRouter();
   const deck = use(props.deck);
   const [guesses, setGuesses] = useState<Guesses>(new Set());
   const [currentPlayer, setCurrentPlayer] = useState<PlayerNumber>(1);
@@ -99,101 +94,8 @@ export default function Game(props: {
   }, [matchFound, guessesMade, collectCards, switchPlayer]);
 
   return (
-    <form className="w-screen h-screen">
-      <header className="absolute top-0 left-0 right-0 h-16 flex items-center justify-between px-2 lg:px-6 py-2">
-        <div className="flex-1">
-          <div className="flex items-center">
-            <div className="mr-2 pr-3 md:mr-4 md:pr-6 flex items-center">
-              <div
-                className={`rounded w-10 h-10 mr-3 flex items-center justify-center font-bold text-2xl ${
-                  playerOneWins || (!gameOver && currentPlayer === 1)
-                    ? "bg-blue-700 text-white"
-                    : "bg-gray-800 text-gray-400"
-                }`}
-              >
-                {playerOneWins ? (
-                  <CheckIcon className="size-6" />
-                ) : !gameOver && currentPlayer === 1 ? (
-                  <StarIcon className="size-6" />
-                ) : null}
-              </div>
-              <div>
-                <div className="leading-none text-sm text-gray-500 whitespace-nowrap">
-                  Player 1
-                </div>
-                <div className="leading-none text-2xl text-white font-bold whitespace-nowrap">
-                  {playerOneCards.size}
-                </div>
-              </div>
-            </div>
-            <div className="mr-2 pr-3 md:mr-4 md:pr-6 flex items-center">
-              <div
-                className={`rounded w-10 h-10 mr-3 flex items-center justify-center font-bold text-2xl ${
-                  playerTwoWins || (!gameOver && currentPlayer === 2)
-                    ? "bg-red-700 text-white"
-                    : "bg-gray-800 text-gray-400"
-                }`}
-              >
-                {playerTwoWins ? (
-                  <CheckIcon className="size-6" />
-                ) : !gameOver && currentPlayer === 2 ? (
-                  <StarIcon className="size-6" />
-                ) : null}
-              </div>
-              <div>
-                <div className="leading-none text-sm text-gray-500 whitespace-nowrap">
-                  Player 2
-                </div>
-                <div className="leading-none text-2xl text-white font-bold whitespace-nowrap">
-                  {playerTwoCards.size}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="flex-1 items-end text-right">
-          {matchFound ? (
-            <button
-              type="button"
-              className="cursor-pointer rounded-full inline-block px-2 md:px-3 py-1 md:py-1 font-bold bg-emerald-700 text-sm text-white text-nowrap hover:bg-emerald-800 border-b-4 border-emerald-800"
-              onClick={collectCards}
-            >
-              <span className="flex items-center">
-                <CheckIcon className="size-7 md:size-5 md:mr-1" />
-                <span className="hidden md:inline-block">Match Found!</span>
-              </span>
-            </button>
-          ) : guessesMade ? (
-            <button
-              type="button"
-              className="rounded-full inline-block px-2 md:px-3 py-1 md:py-1 cursor-pointer font-bold bg-violet-800 text-white text-sm text-nowrap hover:bg-violet-900 border-b-4 border-violet-900"
-              onClick={switchPlayer}
-            >
-              <span className="flex items-center">
-                <ArrowPathIcon className="size-7 md:size-5 md:mr-1" />
-                <span className="hidden md:inline-block">Switch</span>
-              </span>
-            </button>
-          ) : null}
-          {!gameOver && (
-            <button
-              type="button"
-              className="inline-block rounded-full cursor-pointer px-2 md:px-3 py-1 md:py-1 ml-2 md:ml-4 text-sm font-bold bg-gray-50 text-gray-700 hover:bg-gray-200 border-b-4 border-gray-400 hover:text-gray-900 active:border-0"
-              onClick={() => {
-                if (confirm("Are you sure you want to start a new game?")) {
-                  router.push("/");
-                }
-              }}
-            >
-              <span className="flex items-center justify-center">
-                <SparklesIcon className="size-7 md:size-5 md:mr-1" />
-                <span className="hidden md:inline-block">New Game</span>
-              </span>
-            </button>
-          )}
-        </div>
-      </header>
-      <div className="w-screen h-screen pt-16 px-2 pb-2 lg:px-6 lg:pb-6">
+    <form className="h-[calc(100vh-4rem)] flex flex-col">
+      <div className="flex-1 h-full px-2 lg:px-6 lg:pb-6">
         {gameOver ? (
           <Suspense>
             <GameOver winner={playerOneWins ? 1 : 2} />
@@ -243,6 +145,65 @@ export default function Game(props: {
             ))}
           </div>
         )}
+      </div>
+      <div className="h-16 flex items-center justify-between px-2 lg:px-6 py-2">
+        <div className="flex-1">
+          <div className="flex items-center">
+            <div className="mr-2 pr-3 md:mr-4 md:pr-6 flex items-center">
+              <div className="rounded w-10 h-10 mr-3 flex items-center justify-center font-bold text-2xl bg-blue-700 text-white">
+                {playerOneWins ? (
+                  <CheckIcon className="size-6" />
+                ) : !gameOver && currentPlayer === 1 ? (
+                  <StarIcon className="size-6" />
+                ) : null}
+              </div>
+              <div>
+                <div className="leading-none text-sm text-gray-500 whitespace-nowrap">
+                  Player 1
+                </div>
+                <div className="leading-none text-2xl text-white font-bold whitespace-nowrap">
+                  {playerOneCards.size}
+                </div>
+              </div>
+            </div>
+            <div className="mr-2 pr-3 md:mr-4 md:pr-6 flex items-center">
+              <div className="rounded w-10 h-10 mr-3 flex items-center justify-center font-bold text-2xl bg-red-700 text-white">
+                {playerTwoWins ? (
+                  <CheckIcon className="size-6" />
+                ) : !gameOver && currentPlayer === 2 ? (
+                  <StarIcon className="size-6" />
+                ) : null}
+              </div>
+              <div>
+                <div className="leading-none text-sm text-gray-500 whitespace-nowrap">
+                  Player 2
+                </div>
+                <div className="leading-none text-2xl text-white font-bold whitespace-nowrap">
+                  {playerTwoCards.size}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="flex-1 items-end text-right">
+          {matchFound ? (
+            <Button
+              theme="primary"
+              icon={<Button.Icon Component={CheckIcon} />}
+              onClick={collectCards}
+            >
+              Match Found!
+            </Button>
+          ) : guessesMade ? (
+            <Button
+              theme="primary"
+              icon={<Button.Icon Component={ArrowPathIcon} />}
+              onClick={switchPlayer}
+            >
+              Switch
+            </Button>
+          ) : null}
+        </div>
       </div>
     </form>
   );

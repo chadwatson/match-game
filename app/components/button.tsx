@@ -6,25 +6,45 @@ import {
   FunctionComponent,
   ReactNode,
 } from "react";
+import { Button as HeadlessUiButton } from "@headlessui/react";
 
-function Button(
-  props: DetailedHTMLProps<
-    ButtonHTMLAttributes<HTMLButtonElement>,
-    HTMLButtonElement
-  > & {
-    icon?: ReactNode | null | undefined;
+type ButtonTheme = "primary" | "neutral";
+
+type ButtonProps = DetailedHTMLProps<
+  ButtonHTMLAttributes<HTMLButtonElement>,
+  HTMLButtonElement
+> & {
+  icon?: ReactNode | null | undefined;
+  glow?: boolean | undefined;
+  theme?: ButtonTheme | undefined;
+};
+
+function themeClassName(props: ButtonProps) {
+  switch (props.theme) {
+    case "primary":
+      return `bg-violet-600 text-white disabled:text-violet-300 ring-violet-500 enabled:hover:bg-violet-700 enabled:hover:ring-violet-600 enabled:active:bg-violet-800 enabled:active:text-violet-200 ${
+        props.glow ? "shadow-violet-500/50" : ""
+      }`;
+    default:
+      return `bg-gray-800 text-white disabled:text-gray-500 ring-gray-800 enabled:hover:bg-gray-700 enabled:hover:ring-gray-600 enabled:active:bg-gray-800 enabled:active:text-gray-200 ${
+        props.glow ? "shadow-gray-500/50" : ""
+      }`;
   }
-) {
-  const { icon, className, ...rest } = props;
+}
+
+export const createButtonClassName = (props: ButtonProps) =>
+  `inline-flex items-center justify-center rounded-full px-3 py-2 text-sm text-center font-semibold ring-1 enabled:cursor-pointer ring-inset ${themeClassName(
+    props
+  )} ${props.glow ? "shadow-lg active:shadow-md" : ""} ${props.className}`;
+
+function Button(props: ButtonProps) {
+  const { icon, className, children, ...rest } = props;
 
   return (
-    <button
-      {...rest}
-      className={`inline-flex items-center rounded-full bg-violet-600 px-3 py-2 text-sm font-semibold text-white disabled:text-violet-300 shadow-lg shadow-violet-500/50 active:shadow-md ring-1 enabled:cursor-pointer ring-violet-500 ring-inset enabled:hover:bg-violet-700 enabled:hover:ring-violet-600 enabled:active:bg-violet-800 enabled:active:text-violet-200 ${className}`}
-    >
-      {props.icon}
-      {props.children}
-    </button>
+    <HeadlessUiButton {...rest} className={createButtonClassName(props)}>
+      {icon}
+      {children}
+    </HeadlessUiButton>
   );
 }
 
