@@ -1,17 +1,25 @@
 import { User } from "@clerk/nextjs/server";
-import { ArrowRightIcon } from "@heroicons/react/24/outline";
-import { PlayIcon } from "@heroicons/react/24/solid";
+import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
+import {
+  ArrowRightIcon,
+  ArrowUpOnSquareIcon,
+} from "@heroicons/react/24/outline";
+import { EllipsisHorizontalCircleIcon } from "@heroicons/react/24/outline";
+import { PencilIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import { Suspense, use } from "react";
+import { UserInfo } from "../lib/user";
 
 function GameOwner(props: {
   owner: Promise<User | null | undefined>;
   playCount: number;
 }) {
   const user = use(props.owner);
+
   if (!user) {
     return null;
   }
+
   return (
     <div className="flex items-center">
       <img
@@ -30,6 +38,38 @@ function GameOwner(props: {
   );
 }
 
+function Options(props: { deckId: number }) {
+  return (
+    <Popover className="relative">
+      <PopoverButton className="block p-1 cursor-pointer">
+        <EllipsisHorizontalCircleIcon className="size-6" />
+      </PopoverButton>
+      <PopoverPanel
+        anchor="bottom"
+        className="w-32 divide-y divide-white/5 rounded-xl bg-gray-800 border border-gray-700 text-sm/6 shadow-2xl transition duration-200 ease-in-out [--anchor-gap:var(--spacing-5)] data-[closed]:-translate-y-1 data-[closed]:opacity-0"
+        transition
+      >
+        <Link
+          className="flex items-center w-full rounded-lg py-2 px-4 transition hover:bg-white/5"
+          href={`/decks/${props.deckId}/edit`}
+          title="Edit this deck."
+        >
+          <PencilIcon className="size-4 mr-2" />
+          <p className="font-semibold text-white">Edit</p>
+        </Link>
+        <Link
+          className="flex items-center w-full rounded-lg py-2 px-4 transition hover:bg-white/5"
+          href="#"
+          title="Share this deck."
+        >
+          <ArrowUpOnSquareIcon className="size-5 mr-2" />
+          <p className="font-semibold text-white">Share</p>
+        </Link>
+      </PopoverPanel>
+    </Popover>
+  );
+}
+
 export default function GameOptionCard(props: {
   type: "deck" | "unsplash";
   deckId?: number | undefined;
@@ -38,6 +78,7 @@ export default function GameOptionCard(props: {
   description: string;
   playCount: number | null;
   owner: Promise<User | null | undefined>;
+  canEdit: boolean;
 }) {
   const { type, deckId } = props;
   const playHref = {
@@ -46,21 +87,28 @@ export default function GameOptionCard(props: {
   };
 
   return (
-    <div className="relative rounded-lg overflow-hidden bg-gray-900 border border-gray-800 shadow-md">
+    <div className="relative rounded-lg bg-gray-900 border border-gray-800 shadow-md">
       <Link
         title={props.title}
         href={playHref}
         className="block relative active:opacity-80"
       >
-        <img
-          src={props.thumbnail ?? ""}
-          alt={props.title}
-          className="block object-cover aspect-3/2 overflow-clip max-w-full w-full"
-        />
+        <div className="relative rounded-t-lg overflow-hidden">
+          <img
+            src={props.thumbnail ?? ""}
+            alt={props.title}
+            className="block object-cover aspect-3/2 overflow-clip max-w-full w-full"
+          />
+        </div>
         <div className="absolute left-0 right-0 bottom-0 h-16 min-h-16 flex items-end px-3 pb-2 bg-gradient-to-b from-black/0 to-black/75">
-          <Suspense>
-            <GameOwner owner={props.owner} playCount={props.playCount ?? 0} />
-          </Suspense>
+          <div className="flex justify-between items-center w-full">
+            <Suspense>
+              <GameOwner owner={props.owner} playCount={props.playCount ?? 0} />
+            </Suspense>
+            <button type="button">
+              <ArrowUpOnSquareIcon className="size-5 mr-2" />
+            </button>
+          </div>
         </div>
       </Link>
       <div className="px-4 py-3">
@@ -73,11 +121,21 @@ export default function GameOptionCard(props: {
         <Link
           title={`Play ${props.title}`}
           href={playHref}
-          className="w-full px-2 py-3 flex justify-center items-center hover:bg-gray-100 active:bg-gray-200 dark:hover:bg-gray-800 dark:active:bg-gray-700"
+          className="flex-1 px-2 py-3 flex justify-center items-center border-r border-gray-800 hover:bg-gray-100 active:bg-gray-200 dark:hover:bg-gray-800 dark:active:bg-gray-700"
         >
           <span className="font-bold mr-2">Play</span>
           <ArrowRightIcon className="size-5" />
         </Link>
+        {props.canEdit && (
+          <Link
+            title={`Edit ${props.title}`}
+            href={`/decks/${deckId}/edit`}
+            className="flex-1 px-2 py-3 flex justify-center items-center hover:bg-gray-100 active:bg-gray-200 dark:hover:bg-gray-800 dark:active:bg-gray-700"
+          >
+            <PencilIcon className="size-4 mr-2" />
+            <span className="font-bold">Edit</span>
+          </Link>
+        )}
       </div>
     </div>
   );

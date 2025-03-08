@@ -2,6 +2,8 @@ import { neon } from "@neondatabase/serverless";
 import { DeckRecord, UserRecord } from "./lib/types";
 import GameOptionCard from "./components/game-option-card";
 import { clerkClient } from "@clerk/nextjs/server";
+import { ReactNode } from "react";
+import { fetchUserInfo, UserInfo } from "./lib/user";
 
 async function fetchFeaturedGames() {
   const sql = neon(`${process.env.DATABASE_URL}`);
@@ -23,26 +25,65 @@ async function fetchGameOwner(deck: DeckRecord) {
   return await client.users.getUser(user.clerk_user_id);
 }
 
+function GameList(props: {
+  title: ReactNode;
+  games: DeckRecord[];
+  userInfo: UserInfo;
+}) {
+  return (
+    <section className="mb-6">
+      <h2 className="font-medium text-base/7 truncate mb-2">{props.title}</h2>
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-6">
+        {props.games.map((deck) => (
+          <GameOptionCard
+            key={deck.id}
+            type="deck"
+            deckId={deck.id}
+            thumbnail={deck.image_urls?.[0]}
+            title={deck.name}
+            description={deck.description ?? ""}
+            playCount={deck.play_count}
+            owner={fetchGameOwner(deck)}
+            canEdit={props.userInfo.appUser?.id === deck.user_id}
+          />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+async function YourDecksSection() {
+  const userInfo = await fetchUserInfo();
+  if (!userInfo.appUser) {
+    return null;
+  }
+
+  const sql = neon(`${process.env.DATABASE_URL}`);
+  const yourDecks =
+    await sql`SELECT * FROM decks WHERE user_id = ${userInfo.appUser.id}`;
+
+  return (
+    <GameList
+      title="Your Decks"
+      games={(yourDecks as DeckRecord[]) ?? []}
+      userInfo={userInfo}
+    />
+  );
+}
+
 export default async function Home() {
+  const userInfo = await fetchUserInfo();
   const featuredGames = await fetchFeaturedGames();
+
   return (
     <div className="w-full py-4 px-4">
-      <div className="max-w-3xl">
-        <h2 className="font-medium text-base/7 truncate mb-4">Featured ⭐️</h2>
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-6">
-          {featuredGames.map((deck) => (
-            <GameOptionCard
-              key={deck.id}
-              type="deck"
-              deckId={deck.id}
-              thumbnail={deck.image_urls?.[0]}
-              title={deck.name}
-              description={deck.description ?? ""}
-              playCount={deck.play_count}
-              owner={fetchGameOwner(deck)}
-            />
-          ))}
-        </div>
+      <div className="max-w-3xl mx-auto">
+        <GameList
+          title={<>Featured ⭐️</>}
+          games={featuredGames}
+          userInfo={userInfo}
+        />
+        {!!userInfo.clerkUser && <YourDecksSection />}
       </div>
     </div>
   );
