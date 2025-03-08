@@ -23,7 +23,7 @@ import { useState, useTransition } from "react";
 import { DeckRecord, UserRecord } from "@/app/lib/types";
 import { addDeckImageUrl } from "@/app/actions";
 
-function UrlTab(props: { customDeck: DeckRecord; onComplete: () => void }) {
+function UrlTab(props: { deck: DeckRecord; onComplete: () => void }) {
   const [isPending, startTransition] = useTransition();
   const [url, setUrl] = useState("");
   const [imageLoaded, setImageLoaded] = useState(false);
@@ -40,7 +40,7 @@ function UrlTab(props: { customDeck: DeckRecord; onComplete: () => void }) {
 
   return (
     <form className="h-52 px-4" action={submitAction}>
-      <input type="hidden" name="deck-id" value={props.customDeck.id} />
+      <input type="hidden" name="deck-id" value={props.deck.id} />
       <div className="col-span-full">
         <div className="mb-2">
           <label
@@ -112,12 +112,12 @@ function MediaLibrary() {
 
 export default function AddImageDialog({
   user,
-  customDeck,
+  deck,
   isOpen,
   onClose,
 }: {
   user: UserRecord;
-  customDeck: DeckRecord;
+  deck: DeckRecord;
   isOpen: boolean;
   onClose: () => void;
 }) {
@@ -164,12 +164,12 @@ export default function AddImageDialog({
                 <TabPanel>
                   <UploadImageField
                     user={user}
-                    customDeck={customDeck}
+                    deck={deck}
                     onComplete={onClose}
                   />
                 </TabPanel>
                 <TabPanel>
-                  <UrlTab customDeck={customDeck} onComplete={onClose} />
+                  <UrlTab deck={deck} onComplete={onClose} />
                 </TabPanel>
                 <TabPanel>
                   <MediaLibrary />
