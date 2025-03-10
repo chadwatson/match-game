@@ -23,3 +23,13 @@ export function remove<K, V>(key: K) {
     return result;
   };
 }
+
+export function update<K, V>(key: K) {
+  return (fn: (value: V) => V) => (map: Map<K, V>) => {
+    const result = new Map(map);
+    if (result.has(key)) {
+      result.set(key, fn(result.get(key) as V));
+    }
+    return result;
+  };
+}
