@@ -1,7 +1,7 @@
 "use client";
-import { Suspense, use, useCallback, useEffect, useState } from "react";
+import { Suspense, useCallback, useEffect, useState } from "react";
 import * as set from "@/app/lib/set";
-import { Deck, GameDifficulty } from "@/app/lib/types";
+import { GameDifficulty } from "@/app/lib/types";
 import { ArrowPathIcon, CheckIcon } from "@heroicons/react/24/outline";
 import { preloadImage } from "@/app/lib/image";
 import GameOver from "./game-over";
@@ -21,8 +21,8 @@ const allGuessesMade = (guesses: Guesses) => {
 
 const guessesMatch = (guesses: Set<number>) => {
   const [a, b] = [...guesses];
-  return function (deck: string[]) {
-    return allGuessesMade(guesses) && deck[a] === deck[b];
+  return function (cards: string[]) {
+    return allGuessesMade(guesses) && cards[a] === cards[b];
   };
 };
 
@@ -39,11 +39,13 @@ function gridClassName(difficulty: GameDifficulty) {
   }
 }
 
-export default function Game(props: {
-  deck: Promise<Deck>;
+export default function Game({
+  cards,
+  difficulty,
+}: {
+  cards: string[];
   difficulty: GameDifficulty;
 }) {
-  const deck = use(props.deck);
   const [guesses, setGuesses] = useState<Guesses>(new Set());
   const [currentPlayer, setCurrentPlayer] = useState<PlayerNumber>(1);
   const [playerOneCards, setPlayerOneCards] = useState<PlayerCards>(
@@ -53,10 +55,10 @@ export default function Game(props: {
     () => new Set()
   );
 
-  const matchFound = guessesMatch(guesses)(deck);
+  const matchFound = guessesMatch(guesses)(cards);
   const guessesMade = guesses.size >= 2;
   const foundCards = set.join(playerTwoCards)(playerOneCards);
-  const gameOver = foundCards.size === deck.length;
+  const gameOver = foundCards.size === cards.length;
   const playerOneWins = gameOver && playerOneCards.size > playerTwoCards.size;
   const playerTwoWins = gameOver && playerOneCards.size < playerTwoCards.size;
 
@@ -75,8 +77,8 @@ export default function Game(props: {
   }, [setGuesses, setCurrentPlayer]);
 
   useEffect(() => {
-    deck.forEach(preloadImage);
-  }, [deck]);
+    cards.forEach(preloadImage);
+  }, [cards]);
 
   useEffect(() => {
     function listener(event: KeyboardEvent) {
@@ -103,10 +105,10 @@ export default function Game(props: {
         ) : (
           <div
             className={`w-full h-full max-w-full max-h-full grid gap-2 lg:gap-6 ${gridClassName(
-              props.difficulty
+              difficulty
             )}`}
           >
-            {[...deck].map((image, index) => (
+            {[...cards].map((image, index) => (
               <div key={`card-${index}`} className="w-full h-full relative">
                 {foundCards.has(index) ? (
                   <div className="block w-full h-full border border-gray-800 rounded lg:rounded-lg overflow-hidden" />
