@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import {
   ClerkProvider,
   SignInButton,
-  SignUpButton,
   SignedIn,
   SignedOut,
   UserButton,
@@ -10,6 +9,7 @@ import {
 import "./globals.css";
 import MakeCustomDeckButton from "./components/make-custom-deck-button";
 import Link from "next/link";
+import Button from "./components/button";
 
 export const metadata: Metadata = {
   title: "Match & Match",
@@ -29,11 +29,12 @@ export default async function RootLayout({
             <h1 className="font-bold text-lg">
               <Link href="/">Match & Match</Link>
             </h1>
-            <div className="flex justify-end items-center gap-4">
+            <div className="flex justify-end items-center gap-2">
               <MakeCustomDeckButton />
               <SignedOut>
-                <SignInButton />
-                <SignUpButton />
+                <SignInButton>
+                  <Button>Sign In</Button>
+                </SignInButton>
               </SignedOut>
               <SignedIn>
                 <UserButton />
