@@ -251,15 +251,22 @@ function CustomDeckForm({
                 Make your own deck
               </h1>
             </div>
-            <Link
-              href={createPlayDeckHref({ deckId: deck.id })}
-              prefetch
-              className={createButtonClassName({ theme: "primary" })}
-            >
-              <Button.Icon Component={CheckIcon} />
-              Let&apos;s play!
-            </Link>
+            {images.length >= MIN_FILES_COUNT() && (
+              <Link
+                href={createPlayDeckHref({ deckId: deck.id })}
+                prefetch
+                className={createButtonClassName({ theme: "primary" })}
+              >
+                <Button.Icon Component={CheckIcon} />
+                Let&apos;s play!
+              </Link>
+            )}
           </div>
+          <p className="mb-6 text-sm text-gray-700 dark:text-gray-300">
+            The funnest match game is your own match game. Add at least 18
+            images for a full deck. Don&apos;t worry about the order of your
+            images. They will be shuffled each time you play!
+          </p>
           <CustomDeckInfoForm deck={deck} />
         </div>
         <div className="sm:col-span-full">
