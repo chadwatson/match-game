@@ -5,6 +5,7 @@ import { upload } from "@vercel/blob/client";
 import { PlusIcon, MinusIcon } from "@heroicons/react/24/outline";
 import { always } from "@/app/lib/function";
 import Button, { createButtonClassName } from "@/app/components/button";
+import { Button as HeadlessButton } from "@headlessui/react";
 import { CheckIcon } from "@heroicons/react/24/solid";
 import { DeckRecord, UserRecord } from "@/app/lib/types";
 import { deleteDeckImage, updateDeck } from "@/app/actions";
@@ -21,6 +22,7 @@ function CustomDeckImage(props: {
   deck: DeckRecord;
   src: File | string;
   index: number;
+  canRemove: boolean;
   onRemove: (index: number) => void;
 }) {
   const [isDeleting, startDeleting] = useTransition();
@@ -29,7 +31,7 @@ function CustomDeckImage(props: {
   );
 
   return (
-    <div className="relative w-full group col-span-1 p-2">
+    <div className="relative w-full col-span-1 p-2">
       <div className="relative w-full h-28 bg-gray-400 bg-cover bg-center rounded-lg overflow-hidden">
         <img
           alt={src}
@@ -41,23 +43,25 @@ function CustomDeckImage(props: {
           }}
         />
       </div>
-      <button
-        type="button"
-        className="hidden absolute top-0 right-0 w-6 h-6 group-hover:flex items-center justify-center rounded-full bg-red-800 text-white shadow-lg shadow-red-700/50 active:shadow-md ring-1 cursor-pointer ring-red-700 ring-inset hover:ring-red-600 active:bg-red-700"
-        disabled={isDeleting}
-        onClick={() => {
-          props.onRemove(props.index);
+      {props.canRemove && (
+        <button
+          type="button"
+          className="absolute top-0 right-0 w-6 h-6 flex items-center justify-center rounded-full bg-red-800 text-white shadow-lg shadow-red-700/50 active:shadow-md ring-1 cursor-pointer ring-red-700 ring-inset hover:ring-red-600 active:bg-red-700"
+          disabled={isDeleting}
+          onClick={() => {
+            props.onRemove(props.index);
 
-          const formData = new FormData();
-          formData.append("deck-id", props.deck.id.toString());
-          formData.append("image-url", props.src);
-          startDeleting(async () => {
-            await deleteDeckImage(formData);
-          });
-        }}
-      >
-        <MinusIcon className="size-4" />
-      </button>
+            const formData = new FormData();
+            formData.append("deck-id", props.deck.id.toString());
+            formData.append("image-url", props.src);
+            startDeleting(async () => {
+              await deleteDeckImage(formData);
+            });
+          }}
+        >
+          <MinusIcon className="size-4" />
+        </button>
+      )}
     </div>
   );
 }
@@ -145,10 +149,12 @@ function CustomDeckImages({
   deck,
   dragOver,
   onRemove,
+  editing,
 }: {
   images: string[];
   deck: DeckRecord;
   dragOver: boolean;
+  editing: boolean;
   onRemove: (index: number) => void;
 }) {
   return (
@@ -159,6 +165,7 @@ function CustomDeckImages({
           src={url}
           deck={deck}
           index={index}
+          canRemove={editing}
           onRemove={onRemove}
         />
       ))}
@@ -182,6 +189,7 @@ function CustomDeckForm({
 }) {
   const [addingImage, setAddingImage] = useState(false);
   const [dragOver, setDragOver] = useState(false);
+  const [editingImages, setEditingImages] = useState(false);
   const [pendingUploads, setPendingUploads] = useState<Map<File, number>>(
     () => new Map()
   );
@@ -254,27 +262,38 @@ function CustomDeckForm({
           <CustomDeckInfoForm deck={deck} />
         </div>
         <div className="sm:col-span-full">
-          <div className="mb-2 flex items-center">
-            <div className="inline-block mr-3 text-sm/6 font-medium text-black dark:text-white">
-              Images{" "}
-              <span className="text-gray-700 dark:text-gray-300">
-                ({images.length} / {MIN_FILES_COUNT()})
-              </span>
+          <div className="mb-2 flex items-center justify-between">
+            <div className="flex items-center">
+              <div className="inline-block mr-3 text-sm/6 font-medium text-black dark:text-white">
+                Images{" "}
+                <span className="text-gray-700 dark:text-gray-300">
+                  ({images.length} / {MIN_FILES_COUNT()})
+                </span>
+              </div>
+              <button
+                type="button"
+                className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-800 text-white shadow-lg shadow-gray-700/50 active:shadow-md ring-1 cursor-pointer ring-gray-700 ring-inset hover:ring-gray-600 active:bg-gray-700"
+                onClick={() => {
+                  setAddingImage(true);
+                }}
+              >
+                <PlusIcon className="size-5" />
+              </button>
             </div>
-            <button
-              type="button"
-              className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-800 text-white shadow-lg shadow-gray-700/50 active:shadow-md ring-1 cursor-pointer ring-gray-700 ring-inset hover:ring-gray-600 active:bg-gray-700"
+            <HeadlessButton
+              className="cursor-pointer text-sm opacity-80 data-[hover]:opacity-90 data-[active]:opacity-100"
               onClick={() => {
-                setAddingImage(true);
+                setEditingImages(!editingImages);
               }}
             >
-              <PlusIcon className="size-5" />
-            </button>
+              {editingImages ? "Done" : "Edit"}
+            </HeadlessButton>
           </div>
           <CustomDeckImages
             images={images}
             deck={deck}
             dragOver={dragOver}
+            editing={editingImages}
             onRemove={(index) => {
               setImages((currentState) => {
                 const nextState = [...currentState];
