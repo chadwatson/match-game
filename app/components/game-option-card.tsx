@@ -86,7 +86,7 @@ export default function GameOptionCard(props: {
         <Link
           title={`Play ${props.title}`}
           href={playHref}
-          className="flex-1 px-2 py-3 flex justify-center items-center border-r border-gray-800 hover:bg-gray-100 active:bg-gray-200 dark:hover:bg-gray-800 dark:active:bg-gray-700"
+          className="flex-1 px-2 py-3 flex justify-center items-center hover:bg-gray-100 active:bg-gray-200 dark:hover:bg-gray-800 dark:active:bg-gray-700"
         >
           <span className="font-bold text-sm mr-2">Play</span>
           <ArrowRightIcon className="size-4" />
@@ -95,7 +95,7 @@ export default function GameOptionCard(props: {
           <Link
             title={`Edit ${props.title}`}
             href={`/decks/${deckId}/edit`}
-            className="flex-1 px-2 py-3 flex justify-center items-center hover:bg-gray-100 active:bg-gray-200 dark:hover:bg-gray-800 dark:active:bg-gray-700"
+            className="flex-1 px-2 py-3 flex justify-center items-center border-l border-gray-800 hover:bg-gray-100 active:bg-gray-200 dark:hover:bg-gray-800 dark:active:bg-gray-700"
           >
             <PencilIcon className="size-3 mr-2" />
             <span className="font-bold text-sm">Edit</span>
