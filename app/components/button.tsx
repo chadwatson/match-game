@@ -19,7 +19,12 @@ type ButtonProps = DetailedHTMLProps<
   theme?: ButtonTheme | undefined;
 };
 
-function themeClassName(props: ButtonProps) {
+type ButtonThemeProps = {
+  glow?: boolean | undefined;
+  theme?: ButtonTheme | undefined;
+};
+
+function themeClassName(props: ButtonThemeProps) {
   switch (props.theme) {
     case "primary":
       return `bg-violet-600 text-white disabled:text-violet-300 ring-violet-500 enabled:hover:bg-violet-700 enabled:hover:ring-violet-600 enabled:active:bg-violet-800 enabled:active:text-violet-200 ${
@@ -38,10 +43,13 @@ export const createButtonClassName = (props: ButtonProps) =>
   )} ${props.glow ? "shadow-lg active:shadow-md" : ""} ${props.className}`;
 
 function Button(props: ButtonProps) {
-  const { icon, children, ...rest } = props;
+  const { icon, children, glow, theme, ...rest } = props;
 
   return (
-    <HeadlessUiButton {...rest} className={createButtonClassName(props)}>
+    <HeadlessUiButton
+      {...rest}
+      className={createButtonClassName({ theme, glow })}
+    >
       {icon}
       {children}
     </HeadlessUiButton>

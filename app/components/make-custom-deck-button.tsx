@@ -1,29 +1,40 @@
 "use client";
 import { PlusIcon } from "@heroicons/react/24/outline";
-import { createDeck } from "../actions";
-import Button from "./button";
-import Form from "next/form";
+import Button, { createButtonClassName } from "./button";
 import { usePathname } from "next/navigation";
-import { useFormStatus } from "react-dom";
+import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
+import Link from "next/link";
 
-function MakeDeckSubmitButton() {
-  const { pending } = useFormStatus();
+function MakeDeckLink() {
   return (
-    <Button
-      type="submit"
-      icon={<Button.Icon Component={PlusIcon} />}
-      disabled={pending}
+    <Link
+      href="/new-deck"
+      className={createButtonClassName({ theme: "primary", glow: true })}
     >
-      {pending ? "Setting up..." : "Make your own"}
-    </Button>
+      <Button.Icon Component={PlusIcon} />
+      Make your own
+    </Link>
   );
 }
 
 function MakeDeckButtonForm() {
   return (
-    <Form action={createDeck}>
-      <MakeDeckSubmitButton />
-    </Form>
+    <>
+      <SignedOut>
+        <SignInButton forceRedirectUrl="/new-deck">
+          <Button
+            theme="primary"
+            glow
+            icon={<Button.Icon Component={PlusIcon} />}
+          >
+            Make your own
+          </Button>
+        </SignInButton>
+      </SignedOut>
+      <SignedIn>
+        <MakeDeckLink />
+      </SignedIn>
+    </>
   );
 }
 
