@@ -15,6 +15,7 @@ import Form from "next/form";
 import AddImageDialog from "./add-image-dialog";
 import Link from "next/link";
 import { PutBlobResult } from "@vercel/blob";
+import { createPlayDeckHref } from "@/app/lib/routing";
 
 const MIN_FILES_COUNT = always(18);
 
@@ -251,7 +252,7 @@ function CustomDeckForm({
               </h1>
             </div>
             <Link
-              href={`/decks/${deck.id}`}
+              href={createPlayDeckHref({ deckId: deck.id })}
               prefetch
               className={createButtonClassName({ theme: "primary" })}
             >

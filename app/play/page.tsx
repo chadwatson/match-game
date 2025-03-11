@@ -1,17 +1,18 @@
 import * as array from "@/app/lib/array";
-import { GamePageSearchParams, DeckRecord } from "@/app/lib/types";
+import { DeckRecord, GameDifficulty, GameType } from "@/app/lib/types";
 import Game from "@/app/components/game";
 import { getUser } from "@/app/actions";
 import { redirect } from "next/navigation";
 import { neon } from "@neondatabase/serverless";
 
-type PageParams = {
-  id: string;
+type SearchParams = {
+  type?: GameType;
+  deckId?: string;
+  difficulty?: GameDifficulty | "" | undefined;
 };
 
 type PageProps = {
-  params: Promise<PageParams>;
-  searchParams: Promise<GamePageSearchParams>;
+  searchParams: Promise<SearchParams>;
 };
 
 async function fetchDeck(deckId: number) {

@@ -1,24 +1,11 @@
-export type Deck = string[];
-
 export type GameDifficulty = "easy" | "medium" | "hard" | "insane";
 
-export type GameTheme =
-  | "bluey"
-  | "nature"
-  | "animals"
-  | "fish"
-  | "mountains"
-  | "cars";
+export type GameType = "deck"; // TODO: More options to come
 
 export type GameParams = {
-  theme: GameTheme;
-  difficulty: GameDifficulty;
-};
-
-export type GamePageSearchParams = {
-  type?: "deck" | "unsplash";
-  deckId?: string;
-  difficulty?: GameDifficulty | "" | undefined;
+  type: GameType;
+  deckId?: number;
+  difficulty?: GameDifficulty;
 };
 
 export type DeckRecord = {

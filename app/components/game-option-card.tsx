@@ -5,6 +5,8 @@ import Link from "next/link";
 import { Suspense, use } from "react";
 import GameOptionCardThumbnail from "./game-option-card-thumbnail";
 import ShareButton from "./share-button";
+import { createPlayHref } from "../lib/routing";
+import { GameType } from "../lib/types";
 
 function GameOwner(props: {
   owner: Promise<User | null | undefined>;
@@ -35,7 +37,7 @@ function GameOwner(props: {
 }
 
 export default function GameOptionCard(props: {
-  type: "deck" | "unsplash";
+  type: GameType;
   deckId?: number | undefined;
   thumbnail?: string | null | undefined;
   title: string;
@@ -45,10 +47,7 @@ export default function GameOptionCard(props: {
   canEdit: boolean;
 }) {
   const { type, deckId } = props;
-  const playHref = {
-    pathname: "/play",
-    query: { type, deckId, difficulty: "medium" },
-  };
+  const playHref = createPlayHref({ type, deckId, difficulty: "medium" });
 
   return (
     <div className="relative rounded-lg bg-gray-900 border border-gray-800 shadow-md">

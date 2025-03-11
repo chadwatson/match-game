@@ -161,7 +161,7 @@ export default function Game(props: {
                 <div className="leading-none text-sm text-gray-500 whitespace-nowrap">
                   Player 1
                 </div>
-                <div className="leading-none text-2xl text-white font-bold whitespace-nowrap">
+                <div className="leading-none text-2xl text-black dark:text-white font-bold whitespace-nowrap">
                   {playerOneCards.size}
                 </div>
               </div>
@@ -178,7 +178,7 @@ export default function Game(props: {
                 <div className="leading-none text-sm text-gray-500 whitespace-nowrap">
                   Player 2
                 </div>
-                <div className="leading-none text-2xl text-white font-bold whitespace-nowrap">
+                <div className="leading-none text-2xl text-black dark:text-white font-bold whitespace-nowrap">
                   {playerTwoCards.size}
                 </div>
               </div>
