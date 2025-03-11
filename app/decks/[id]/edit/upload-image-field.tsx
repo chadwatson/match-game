@@ -44,13 +44,9 @@ function PendingUploads({
         <Progress max={100} value={Math.round(totalProgress)} showPercentage />
       </div>
       <div className="w-full overflow-x-auto flex items-center">
-        {[
-          ...pendingUploads
-            .entries()
-            .map(([file, progress]) => (
-              <PendingUpload key={file.name} file={file} progress={progress} />
-            )),
-        ]}
+        {[...pendingUploads.entries()].map(([file, progress]) => (
+          <PendingUpload key={file.name} file={file} progress={progress} />
+        ))}
       </div>
     </div>
   );
