@@ -20,10 +20,13 @@ import {
 import UploadImageField from "./upload-image-field";
 import Button from "@/app/components/button";
 import { useState, useTransition } from "react";
-import { DeckRecord, UserRecord } from "@/app/lib/types";
+import { DeckRecord } from "@/app/lib/types";
 import { addDeckImageUrl } from "@/app/actions";
 
-function UrlTab(props: { deck: DeckRecord; onComplete: () => void }) {
+function UrlTab(props: {
+  deck: DeckRecord;
+  onComplete: (url: string) => void;
+}) {
   const [isPending, startTransition] = useTransition();
   const [url, setUrl] = useState("");
   const [imageLoaded, setImageLoaded] = useState(false);
@@ -33,7 +36,7 @@ function UrlTab(props: { deck: DeckRecord; onComplete: () => void }) {
     startTransition(async () => {
       const { error } = await addDeckImageUrl(formData);
       if (!error) {
-        props.onComplete();
+        props.onComplete(formData.get("image-url") as string);
       }
     });
   }
@@ -111,15 +114,19 @@ function MediaLibrary() {
 }
 
 export default function AddImageDialog({
-  user,
   deck,
   isOpen,
   onClose,
+  uploadFiles,
+  pendingUploads,
+  onImagesAdded,
 }: {
-  user: UserRecord;
   deck: DeckRecord;
   isOpen: boolean;
+  onImagesAdded: (urls: string[]) => void;
   onClose: () => void;
+  uploadFiles: (files: FileList | File[]) => Promise<void>;
+  pendingUploads: Map<File, number>;
 }) {
   return (
     <Dialog open={isOpen} onClose={onClose} className="relative z-50">
@@ -163,13 +170,17 @@ export default function AddImageDialog({
               <TabPanels className="px-6 pb-6">
                 <TabPanel>
                   <UploadImageField
-                    user={user}
-                    deck={deck}
-                    onComplete={onClose}
+                    uploadFiles={uploadFiles}
+                    pendingUploads={pendingUploads}
                   />
                 </TabPanel>
                 <TabPanel>
-                  <UrlTab deck={deck} onComplete={onClose} />
+                  <UrlTab
+                    deck={deck}
+                    onComplete={(url) => {
+                      onImagesAdded([url]);
+                    }}
+                  />
                 </TabPanel>
                 <TabPanel>
                   <MediaLibrary />

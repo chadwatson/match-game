@@ -30,7 +30,6 @@ export default async function RootLayout({
               <Link href="/">Match & Match</Link>
             </h1>
             <div className="flex justify-end items-center gap-4">
-              <MakeCustomDeckButton />
               <SignedOut>
                 <SignInButton />
                 <SignUpButton />
@@ -40,7 +39,7 @@ export default async function RootLayout({
               </SignedIn>
             </div>
           </header>
-          {children}
+          <main>{children}</main>
         </body>
       </html>
     </ClerkProvider>

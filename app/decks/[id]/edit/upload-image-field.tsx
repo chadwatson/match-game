@@ -4,13 +4,9 @@ import {
   CloudArrowUpIcon,
   PhotoIcon,
 } from "@heroicons/react/24/outline";
-import { FormEvent, useEffect, useRef, useState } from "react";
-import { upload } from "@vercel/blob/client";
-import { PutBlobResult } from "@vercel/blob";
-import { DeckRecord, UserRecord } from "@/app/lib/types";
-import * as map from "@/app/lib/map";
-import * as logic from "@/app/lib/logic";
+import { useRef, useState } from "react";
 import Progress from "@/app/components/progress";
+import { average } from "@/app/lib/number";
 
 function PendingUpload({ file, progress }: { file: File; progress: number }) {
   const [src] = useState(() => URL.createObjectURL(file));
@@ -25,7 +21,7 @@ function PendingUpload({ file, progress }: { file: File; progress: number }) {
         }}
       />
       <div className="absolute bottom-0 left-0 w-full flex justify-end px-3 pt-6 pb-2 rounded-b leading-1 bg-gradient-to-b from-black/0 to-black/75 text-white font-bold text-sm text-center">
-        {progress < 1 ? (
+        {progress < 100 ? (
           <CloudArrowUpIcon className="size-6" />
         ) : (
           <CheckCircleIcon className="size-6 text-green-500 rounded-full" />
@@ -33,14 +29,6 @@ function PendingUpload({ file, progress }: { file: File; progress: number }) {
       </div>
     </div>
   );
-}
-
-function average(xs: number[]) {
-  let sum = 0;
-  for (const x of xs) {
-    sum += x;
-  }
-  return sum / xs.length;
 }
 
 function PendingUploads({
@@ -69,54 +57,46 @@ function PendingUploads({
 }
 
 export default function UploadImageField({
-  user,
-  deck,
-  onComplete,
+  uploadFiles,
+  pendingUploads,
 }: {
-  user: UserRecord;
-  deck: DeckRecord;
-  onComplete: (blobResults: PutBlobResult[]) => void;
+  uploadFiles: (files: FileList | File[]) => Promise<void>;
+  pendingUploads: Map<File, number>;
 }) {
   const form = useRef<HTMLFormElement | null>(null);
   const imageUploadInput = useRef<HTMLInputElement | null>(null);
-  const [pendingUploads, setPendingUploads] = useState<Map<File, number>>(
-    () => new Map()
-  );
-
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-
-    if (imageUploadInput.current) {
-      const files = imageUploadInput.current.files ?? [];
-      const promises = [] as Promise<PutBlobResult>[];
-      for (const file of files) {
-        setPendingUploads(map.set<File, number>(file)(0));
-        promises.push(
-          upload(`${user.id}/${file.name}`, file, {
-            access: "public",
-            clientPayload: `${deck.id}`,
-            handleUploadUrl: `/api/decks/upload?path=/decks/${deck.id}/edit`,
-            multipart: true,
-            onUploadProgress: ({ percentage }) => {
-              setPendingUploads(map.set<File, number>(file)(percentage));
-            },
-          })
-        );
-      }
-
-      const results = await Promise.all(promises);
-      onComplete(results);
-    }
-  }
+  const [dragOver, setDragOver] = useState(false);
 
   if (pendingUploads.size) {
     return <PendingUploads pendingUploads={pendingUploads} />;
   }
 
   return (
-    <form ref={form} onSubmit={handleSubmit}>
+    <form
+      ref={form}
+      onDrop={(event) => {
+        event.preventDefault();
+      }}
+      onDragOver={(event) => {
+        event.preventDefault();
+        setDragOver(true);
+      }}
+      onDragLeave={(event) => {
+        event.preventDefault();
+        setDragOver(false);
+      }}
+      onSubmit={async (event) => {
+        event.preventDefault();
+
+        if (imageUploadInput.current?.files?.length) {
+          await uploadFiles(imageUploadInput.current.files);
+        }
+      }}
+    >
       <label
-        className="flex items-center justify-center w-full rounded-lg border-1 border-dashed cursor-pointer p-4 h-52 opacity-80 hover:opacity-100 focus-within:ring-2 focus-within:ring-violet-600 focus-within:ring-offset-2 focus-within:outline-hidden"
+        className={`flex items-center justify-center w-full rounded-lg border-1 border-dashed cursor-pointer p-4 h-52 opacity-80 hover:border-violet-400 hover:opacity-100 focus-within:ring-2 focus-within:ring-violet-600 focus-within:ring-offset-2 focus-within:outline-hidden ${
+          dragOver ? "opacity-100 border-violet-400" : ""
+        }`}
         htmlFor="image-upload"
         title="Select photos"
       >

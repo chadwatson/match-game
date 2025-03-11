@@ -1,41 +1,53 @@
-import { auth } from "@clerk/nextjs/server";
+import { getAuth } from "@clerk/nextjs/server";
 import { neon } from "@neondatabase/serverless";
 import { handleUpload, type HandleUploadBody } from "@vercel/blob/client";
-import { revalidatePath, revalidateTag } from "next/cache";
+import { revalidatePath } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
-  const { userId } = await auth();
-
-  // Protect the route by checking if the user is signed in
-  if (!userId) {
-    return new NextResponse("Unauthorized", { status: 401 });
-  }
-
   const body = (await request.json()) as HandleUploadBody;
-
-  const sql = neon(`${process.env.DATABASE_URL}`);
-  const [user] = await sql("SELECT id FROM users WHERE clerk_user_id = $1", [
-    userId,
-  ]);
-  if (!user) {
-    throw new Error(`Could not find user: ${userId}`);
-  }
 
   try {
     const jsonResponse = await handleUpload({
       body,
       request,
       onBeforeGenerateToken: async (pathname, clientPayload) => {
-        // Generate a client token for the browser to upload the file
-        // ⚠️ Authenticate and authorize users before generating the token.
-        // Otherwise, you're allowing anonymous uploads.
+        if (!clientPayload) {
+          throw new Error("Insufficient data supplied.");
+        }
+
+        const deckId = parseInt(clientPayload, 10);
+        const { userId } = await getAuth(request);
+
+        if (!userId) {
+          throw new Error("Unauthorized");
+        }
+
+        const sql = neon(`${process.env.DATABASE_URL}`);
+        const [user] = await sql(
+          "SELECT id FROM users WHERE clerk_user_id = $1",
+          [userId]
+        );
+        if (!user) {
+          throw new Error("Could not find user.");
+        }
+
+        const [deckRecord] =
+          await sql`SELECT * FROM decks WHERE id = ${deckId};`;
+
+        if (!deckRecord) {
+          throw new Error("Deck not found");
+        }
+
+        if (deckRecord.user_id !== user.id) {
+          throw new Error("Not authorized to update deck");
+        }
 
         return {
           allowedContentTypes: ["image/jpeg", "image/png", "image/gif"],
           tokenPayload: JSON.stringify({
             userId: user.id,
-            deckId: clientPayload,
+            deckId,
           }),
         };
       },
@@ -43,10 +55,11 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
         if (tokenPayload) {
           const { userId, deckId } = JSON.parse(tokenPayload) as {
             userId: number;
-            deckId: string;
+            deckId: number;
           };
+          const sql = neon(`${process.env.DATABASE_URL}`);
           const [deckRecord] =
-            await sql`SELECT * FROM decks WHERE id = ${parseInt(deckId, 10)};`;
+            await sql`SELECT * FROM decks WHERE id = ${deckId};`;
 
           if (!deckRecord) {
             throw new Error(`Deck not found: ${deckId}`);
@@ -66,6 +79,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     });
 
     const path = request.nextUrl.searchParams.get("path");
+    console.log(path);
     if (path) {
       revalidatePath(path);
       return NextResponse.json({
