@@ -248,7 +248,7 @@ function CustomDeckForm({
               className={createButtonClassName({ theme: "primary" })}
             >
               <Button.Icon Component={CheckIcon} />
-              Let's play!
+              Let&apos;s play!
             </Link>
           </div>
           <CustomDeckInfoForm deck={deck} />

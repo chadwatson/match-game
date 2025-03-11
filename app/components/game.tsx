@@ -76,7 +76,7 @@ export default function Game(props: {
 
   useEffect(() => {
     deck.forEach(preloadImage);
-  }, [props.deck]);
+  }, [deck]);
 
   useEffect(() => {
     function listener(event: KeyboardEvent) {

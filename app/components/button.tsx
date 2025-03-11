@@ -38,7 +38,7 @@ export const createButtonClassName = (props: ButtonProps) =>
   )} ${props.glow ? "shadow-lg active:shadow-md" : ""} ${props.className}`;
 
 function Button(props: ButtonProps) {
-  const { icon, className, children, ...rest } = props;
+  const { icon, children, ...rest } = props;
 
   return (
     <HeadlessUiButton {...rest} className={createButtonClassName(props)}>

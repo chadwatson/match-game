@@ -1,14 +1,8 @@
 import { User } from "@clerk/nextjs/server";
-import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
-import {
-  ArrowRightIcon,
-  ArrowUpOnSquareIcon,
-} from "@heroicons/react/24/outline";
-import { EllipsisHorizontalCircleIcon } from "@heroicons/react/24/outline";
+import { ArrowRightIcon } from "@heroicons/react/24/outline";
 import { PencilIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import { Suspense, use } from "react";
-import { UserInfo } from "../lib/user";
 import GameOptionCardThumbnail from "./game-option-card-thumbnail";
 import ShareButton from "./share-button";
 
@@ -37,38 +31,6 @@ function GameOwner(props: {
         </div>
       </div>
     </div>
-  );
-}
-
-function Options(props: { deckId: number }) {
-  return (
-    <Popover className="relative">
-      <PopoverButton className="block p-1 cursor-pointer">
-        <EllipsisHorizontalCircleIcon className="size-6" />
-      </PopoverButton>
-      <PopoverPanel
-        anchor="bottom"
-        className="w-32 divide-y divide-white/5 rounded-xl bg-gray-800 border border-gray-700 text-sm/6 shadow-2xl transition duration-200 ease-in-out [--anchor-gap:var(--spacing-5)] data-[closed]:-translate-y-1 data-[closed]:opacity-0"
-        transition
-      >
-        <Link
-          className="flex items-center w-full rounded-lg py-2 px-4 transition hover:bg-white/5"
-          href={`/decks/${props.deckId}/edit`}
-          title="Edit this deck."
-        >
-          <PencilIcon className="size-4 mr-2" />
-          <p className="font-semibold text-white">Edit</p>
-        </Link>
-        <Link
-          className="flex items-center w-full rounded-lg py-2 px-4 transition hover:bg-white/5"
-          href="#"
-          title="Share this deck."
-        >
-          <ArrowUpOnSquareIcon className="size-5 mr-2" />
-          <p className="font-semibold text-white">Share</p>
-        </Link>
-      </PopoverPanel>
-    </Popover>
   );
 }
 

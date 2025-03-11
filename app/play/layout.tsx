@@ -12,9 +12,5 @@ export default function GameLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return (
-    <main className="overflow-hidden w-screen h-screen select-none">
-      {children}
-    </main>
-  );
+  return <div className="overflow-hidden w-screen select-none">{children}</div>;
 }
