@@ -104,7 +104,7 @@ export default function Game({
           </Suspense>
         ) : (
           <div
-            className={`w-full h-full max-w-full max-h-full grid gap-2 lg:gap-6 ${gridClassName(
+            className={`w-full h-full max-w-full max-h-full grid gap-2 lg:gap-4 ${gridClassName(
               difficulty
             )}`}
           >
@@ -194,7 +194,7 @@ export default function Game({
               icon={<Button.Icon Component={CheckIcon} />}
               onClick={collectCards}
             >
-              Match Found!
+              Match <span className="hidden sm:inline">Found!</span>
             </Button>
           ) : guessesMade ? (
             <Button
