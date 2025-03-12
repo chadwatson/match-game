@@ -50,7 +50,7 @@ export default function GameOptionCard(props: {
   const playHref = createPlayHref({ type, deckId, difficulty: "medium" });
 
   return (
-    <div className="relative rounded-lg bg-gray-900 border border-gray-800 shadow-md">
+    <div className="relative rounded-lg bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-md">
       <div className="block relative">
         <Link
           title={props.title}
@@ -82,7 +82,7 @@ export default function GameOptionCard(props: {
           {props.description}
         </p>
       </div>
-      <div className="flex items-center justify-between border-t border-gray-800">
+      <div className="flex items-center justify-between border-t border-gray-200 dark:border-gray-800">
         <Link
           title={`Play ${props.title}`}
           href={playHref}
@@ -95,7 +95,7 @@ export default function GameOptionCard(props: {
           <Link
             title={`Edit ${props.title}`}
             href={`/decks/${deckId}/edit`}
-            className="flex-1 px-2 py-3 flex justify-center items-center border-l border-gray-800 hover:bg-gray-100 active:bg-gray-200 dark:hover:bg-gray-800 dark:active:bg-gray-700"
+            className="flex-1 px-2 py-3 flex justify-center items-center border-l border-gray-200 dark:border-gray-800 hover:bg-gray-100 active:bg-gray-200 dark:hover:bg-gray-800 dark:active:bg-gray-700"
           >
             <PencilIcon className="size-3 mr-2" />
             <span className="font-bold text-sm">Edit</span>

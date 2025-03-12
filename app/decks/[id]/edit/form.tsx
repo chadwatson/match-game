@@ -112,7 +112,7 @@ function CustomDeckInfoForm({ deck }: { deck: DeckRecord }) {
               type="text"
               id="name"
               name="name"
-              className="block w-full rounded-md bg-gray-900 px-3 py-1.5 text-base text-gray-900 dark:text-white outline-1 -outline-offset-1 outline-gray-700 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+              className="block w-full rounded-md bg-white dark:bg-gray-900 px-3 py-1.5 text-base text-gray-900 dark:text-white outline-1 -outline-offset-1 outline-gray-300 dark:outline-gray-700 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
               defaultValue={deck.name ?? ""}
             />
           </div>
@@ -134,7 +134,7 @@ function CustomDeckInfoForm({ deck }: { deck: DeckRecord }) {
               type="text"
               id="description"
               name="description"
-              className="block w-full rounded-md bg-gray-900 px-3 py-1.5 text-base text-gray-900 dark:text-white outline-1 -outline-offset-1 outline-gray-700 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+              className="block w-full rounded-md bg-white dark:bg-gray-900 px-3 py-1.5 text-base text-gray-900 dark:text-white outline-1 -outline-offset-1 outline-gray-300 dark:outline-gray-700 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
               defaultValue={deck.description ?? ""}
             />
           </div>
@@ -280,7 +280,7 @@ function CustomDeckForm({
               </div>
               <button
                 type="button"
-                className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-800 text-white shadow-lg shadow-gray-700/50 active:shadow-md ring-1 cursor-pointer ring-gray-700 ring-inset hover:ring-gray-600 active:bg-gray-700"
+                className="w-8 h-8 flex items-center justify-center rounded-full bg-white dark:bg-gray-800 text-black dark:text-white shadow-lg shadow-gray-400/50 dark:shadow-gray-700/50 active:shadow-md ring-1 cursor-pointer ring-gray-300 dark:ring-gray-700 ring-inset hover:ring-gray-400 dark:hover:ring-gray-600 active:bg-gray-200 dark:active:bg-gray-700"
                 onClick={() => {
                   setAddingImage(true);
                 }}

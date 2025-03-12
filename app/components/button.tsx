@@ -31,7 +31,7 @@ function themeClassName(props: ButtonThemeProps) {
         props.glow ? "shadow-violet-500/50" : ""
       }`;
     default:
-      return `bg-gray-800 text-white disabled:text-gray-500 ring-gray-800 enabled:hover:bg-gray-700 enabled:hover:ring-gray-600 enabled:active:bg-gray-800 enabled:active:text-gray-200 ${
+      return `bg-gray-200 dark:bg-gray-800 text-black dark:text-white disabled:text-gray-500 ring-gray-200 dark:ring-gray-800 enabled:hover:bg-gray-300 dark:enabled:hover:bg-gray-700 enabled:hover:ring-gray-400 dark:enabled:hover:ring-gray-600 enabled:active:bg-gray-300 dark:enabled:active:bg-gray-800 enabled:active:text-gray-800 dark:enabled:active:text-gray-200 ${
         props.glow ? "shadow-gray-500/50" : ""
       }`;
   }

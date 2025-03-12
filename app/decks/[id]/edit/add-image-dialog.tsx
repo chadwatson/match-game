@@ -66,7 +66,7 @@ function UrlTab(props: {
               setImageError(false);
               setUrl(event.target.value);
             }}
-            className="block w-full rounded-md bg-gray-900 px-3 py-1.5 text-base text-gray-900 dark:text-white outline-1 -outline-offset-1 outline-gray-700 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+            className="block w-full rounded-md bg-white dark:bg-gray-900 px-3 py-1.5 text-base text-gray-900 dark:text-white outline-1 -outline-offset-1 outline-gray-300 dark:outline-gray-700 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
           />
         </div>
       </div>
@@ -131,8 +131,8 @@ export default function AddImageDialog({
   return (
     <Dialog open={isOpen} onClose={onClose} className="relative z-50">
       <div className="fixed inset-0 flex w-screen items-center justify-center p-4 bg-gray-900/90">
-        <DialogPanel className="max-w-xl w-full border border-gray-800 bg-gray-900 rounded-lg shadow-2xl">
-          <div className="w-full px-6 py-3 border-b border-gray-800 flex justify-between items-center">
+        <DialogPanel className="max-w-xl w-full border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 rounded-lg shadow-2xl">
+          <div className="w-full px-6 py-3 border-b border-gray-200 dark:border-gray-800 flex justify-between items-center">
             <DialogTitle className="font-bold">Add Image</DialogTitle>
             <button
               title="Dismiss"
@@ -144,7 +144,7 @@ export default function AddImageDialog({
           </div>
           <div className="w-full">
             <TabGroup>
-              <TabList className="flex mb-4 border-b border-gray-800">
+              <TabList className="flex mb-4 border-b border-gray-200 dark:border-gray-800">
                 {[
                   <>
                     <CloudArrowUpIcon className="size-5 mr-2" />
@@ -161,7 +161,7 @@ export default function AddImageDialog({
                 ].map((option, index) => (
                   <Tab
                     key={index}
-                    className="flex items-center justify-center cursor-pointer py-3 px-6 text-sm/6 font-semibold text-white focus:outline-none border-b-2 border-transparent data-[selected]:border-violet-500 data-[hover]:bg-white/5 data-[focus]:outline-1 data-[focus]:outline-white"
+                    className="flex items-center justify-center cursor-pointer py-3 px-6 text-sm/6 font-semibold text-black dark:text-white focus:outline-none border-b-2 border-transparent data-[selected]:border-violet-500 data-[hover]:bg-white/5 data-[focus]:outline-1 data-[focus]:outline-white"
                   >
                     {option}
                   </Tab>

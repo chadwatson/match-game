@@ -112,13 +112,15 @@ export default function UploadImageField({
             }}
           />
           <PhotoIcon className="size-12 mx-auto" />
-          <div className="mt-4 flex text-sm/6 text-gray-50">
-            <span className="relative font-semibold text-violet-400 hover:text-violet-500">
+          <div className="mt-4 flex text-sm/6 text-gray-800 dark:text-gray-50">
+            <span className="relative font-semibold text-violet-700 dark:text-violet-400 hover:text-violet-800 dark:hover:text-violet-500">
               <span>Upload a file</span>
             </span>
             <p className="pl-1">or drag and drop</p>
           </div>
-          <p className="text-xs/5 text-gray-400">PNG, JPG, GIF up to 4.5MB</p>
+          <p className="text-xs/5 text-gray-600 dark:text-gray-400">
+            PNG, JPG, GIF up to 4.5MB
+          </p>
         </div>
       </label>
     </form>

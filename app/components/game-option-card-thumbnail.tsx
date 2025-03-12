@@ -12,7 +12,7 @@ export default function GameOptionCardThumbnail({
 }) {
   const [error, setError] = useState(false);
   return !src || error ? (
-    <div className="flex items-center justify-center w-full aspect-3/2 bg-gray-600">
+    <div className="flex items-center justify-center w-full aspect-3/2 bg-gray-400 dark:bg-gray-600">
       <PhotoIcon className="size-8 text-gray-100" />
     </div>
   ) : (

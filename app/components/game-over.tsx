@@ -16,7 +16,7 @@ export default function GameOver(props: { winner: number }) {
             ? "Player 1 wins!"
             : "It's a tie!"}
         </h1>
-        <div className="flex items-center">
+        <div className="flex items-center gap-2">
           <Button
             icon={<Button.Icon Component={ArrowPathIcon} />}
             onClick={() => {
@@ -30,7 +30,7 @@ export default function GameOver(props: { winner: number }) {
             title="Start a new game."
             className={createButtonClassName({ theme: "primary" })}
           >
-            <SparklesIcon className="size-6 mr-2" />
+            <SparklesIcon className="size-5 mr-2" />
             New game
           </Link>
         </div>
