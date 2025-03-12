@@ -6,6 +6,7 @@ import {
   SignedOut,
   UserButton,
 } from "@clerk/nextjs";
+import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
 import MakeCustomDeckButton from "./components/make-custom-deck-button";
 import Link from "next/link";
@@ -42,6 +43,7 @@ export default async function RootLayout({
             </div>
           </header>
           <main>{children}</main>
+          <Analytics />
         </body>
       </html>
     </ClerkProvider>
