@@ -1,41 +1,49 @@
-import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import type { Metadata } from "next";
+import {
+  ClerkProvider,
+  SignInButton,
+  SignedIn,
+  SignedOut,
+  UserButton,
+} from "@clerk/nextjs";
 import "./globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import MakeCustomDeckButton from "./components/make-custom-deck-button";
+import Link from "next/link";
+import Button from "./components/button";
 
 export const metadata: Metadata = {
   title: "Match & Match",
   description: "A matching game!",
 };
 
-export const viewport: Viewport = {
-  width: "device-width",
-  initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
-};
-
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-hidden w-screen h-screen select-none`}
-      >
-        {children}
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        <body className="antialiased">
+          <header className="flex justify-between items-center p-4 h-16">
+            <h1 className="font-bold text-lg">
+              <Link href="/">Match & Match</Link>
+            </h1>
+            <div className="flex justify-end items-center gap-2">
+              <MakeCustomDeckButton />
+              <SignedOut>
+                <SignInButton>
+                  <Button>Sign In</Button>
+                </SignInButton>
+              </SignedOut>
+              <SignedIn>
+                <UserButton />
+              </SignedIn>
+            </div>
+          </header>
+          <main>{children}</main>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

@@ -1,88 +1,90 @@
-import Image, { StaticImageData } from "next/image";
-import Link from "next/link";
-import bluey from "../public/bluey.jpg";
-import fox from "../public/fox.jpg";
-import nature from "../public/nature.jpg";
-import fish from "../public/fish.jpg";
-import mountains from "../public/mountains.jpg";
-import cars from "../public/cars.jpg";
-import { GameDifficulty, GameTheme } from "./lib/types";
+import { neon } from "@neondatabase/serverless";
+import { DeckRecord, UserRecord } from "./lib/types";
+import GameOptionCard from "./components/game-option-card";
+import { clerkClient } from "@clerk/nextjs/server";
+import { ReactNode } from "react";
+import { fetchUserInfo, UserInfo } from "./lib/user";
 
-export default function Home() {
-  const difficulty = "medium";
+async function fetchFeaturedGames() {
+  const sql = neon(`${process.env.DATABASE_URL}`);
+  const featuredDecks = await sql`SELECT * FROM decks WHERE featured = TRUE`;
+  return featuredDecks as DeckRecord[];
+}
 
+async function fetchGameOwner(deck: DeckRecord) {
+  const sql = neon(`${process.env.DATABASE_URL}`);
+  const results =
+    await sql`SELECT clerk_user_id FROM users WHERE id = ${deck.user_id}`;
+
+  if (!results[0]) {
+    return null;
+  }
+
+  const user = results[0] as UserRecord;
+  const client = await clerkClient();
+  return await client.users.getUser(user.clerk_user_id);
+}
+
+function GameList(props: {
+  title: ReactNode;
+  games: DeckRecord[];
+  userInfo: UserInfo;
+}) {
   return (
-    <div className="w-full h-screen flex justify-center items-center py-4 px-6">
-      <div className="max-w-3xl">
-        <h2 className="font-bold text-center text-4xl mb-4">
-          Which game would you like to play?
-        </h2>
-        <div className="grid grid-cols-3 gap-6">
-          <GameThemeOption
-            difficulty={difficulty}
-            theme="bluey"
-            imgSrc={bluey}
-            title="Bluey"
+    <section className="mb-6">
+      <h2 className="font-medium text-base/7 truncate mb-2">{props.title}</h2>
+      <div className="grid grid-cols-2 gap-4 md:grid-cols-3 md:gap-6">
+        {props.games.map((deck) => (
+          <GameOptionCard
+            key={deck.id}
+            type="deck"
+            deckId={deck.id}
+            thumbnail={deck.image_urls?.[0]}
+            title={deck.name}
+            description={deck.description ?? ""}
+            playCount={deck.play_count}
+            owner={fetchGameOwner(deck)}
+            canEdit={props.userInfo.appUser?.id === deck.user_id}
           />
-          <GameThemeOption
-            difficulty={difficulty}
-            theme="animals"
-            imgSrc={fox}
-            title="Animals"
-          />
-          <GameThemeOption
-            difficulty={difficulty}
-            theme="nature"
-            imgSrc={nature}
-            title="Nature"
-          />
-          <GameThemeOption
-            difficulty={difficulty}
-            theme="fish"
-            imgSrc={fish}
-            title="Fish"
-          />
-          <GameThemeOption
-            difficulty={difficulty}
-            theme="mountains"
-            imgSrc={mountains}
-            title="Mountains"
-          />
-          <GameThemeOption
-            difficulty={difficulty}
-            theme="cars"
-            imgSrc={cars}
-            title="Cars"
-          />
-        </div>
+        ))}
       </div>
-    </div>
+    </section>
   );
 }
 
-function GameThemeOption(props: {
-  difficulty: GameDifficulty;
-  theme: GameTheme;
-  imgSrc: StaticImageData;
-  title: string;
-}) {
-  const { theme, difficulty } = props;
+async function YourDecksSection() {
+  const userInfo = await fetchUserInfo();
+  if (!userInfo.appUser) {
+    return null;
+  }
+
+  const sql = neon(`${process.env.DATABASE_URL}`);
+  const yourDecks =
+    await sql`SELECT * FROM decks WHERE user_id = ${userInfo.appUser.id}`;
+
   return (
-    <Link
-      title={props.title}
-      href={{
-        pathname: "/game",
-        query: { theme, difficulty },
-      }}
-      className="active:opacity-80"
-    >
-      <div className="relative rounded-lg overflow-hidden">
-        <Image
-          src={props.imgSrc}
-          alt={props.title}
-          className="block object-cover aspect-3/2 overflow-clip max-w-full h-auto"
+    <GameList
+      title="Your Decks"
+      games={(yourDecks as DeckRecord[]) ?? []}
+      userInfo={userInfo}
+    />
+  );
+}
+
+export default async function Home() {
+  const userInfo = await fetchUserInfo();
+  const featuredGames = await fetchFeaturedGames();
+
+  return (
+    <div className="w-full py-4 px-4">
+      <div className="max-w-3xl mx-auto">
+        <GameList
+          title={<>Featured ⭐️</>}
+          games={featuredGames}
+          userInfo={userInfo}
         />
+        {!!userInfo.clerkUser && <YourDecksSection />}
       </div>
-    </Link>
+    </div>
   );
 }

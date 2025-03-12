@@ -1,21 +1,31 @@
-export type Deck = string[];
-
 export type GameDifficulty = "easy" | "medium" | "hard" | "insane";
 
-export type GameTheme =
-  | "bluey"
-  | "nature"
-  | "animals"
-  | "fish"
-  | "mountains"
-  | "cars";
+export type GameType = "deck"; // TODO: More options to come
 
 export type GameParams = {
-  theme: GameTheme;
-  difficulty: GameDifficulty;
+  type: GameType;
+  deckId?: number;
+  difficulty?: GameDifficulty;
 };
 
-export type GamePageSearchParams = {
-  theme?: GameTheme | "" | undefined;
-  difficulty?: GameDifficulty | "" | undefined;
+export type DeckRecord = {
+  id: number;
+  name: string;
+  description: string | null;
+  created_at: string;
+  updated_at: string;
+  user_id: number;
+  image_urls: string[];
+  featured: boolean | null;
+  play_count: number | null;
+  visibility: "public" | "private" | "unlisted" | null;
+};
+
+export type UserRecord = {
+  id: number;
+  first_name: string | null;
+  last_name: string | null;
+  created_at: string;
+  updated_at: string;
+  clerk_user_id: string;
 };
