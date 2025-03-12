@@ -2,6 +2,8 @@ import * as array from "@/app/lib/array";
 import { DeckRecord, GameDifficulty, GameType } from "@/app/lib/types";
 import Game from "@/app/components/game";
 import { neon } from "@neondatabase/serverless";
+import { fetchUserInfo } from "../lib/user";
+import { redirect } from "next/navigation";
 
 type SearchParams = {
   type?: GameType;
@@ -50,6 +52,13 @@ async function initGame(props: PageProps) {
 export default async function GamePage(props: PageProps) {
   const difficulty = "medium";
   const [deck, cards] = await initGame(props);
+
+  if (deck.visibility === "private") {
+    const { appUser } = await fetchUserInfo();
+    if (deck.user_id !== appUser?.id) {
+      redirect("/");
+    }
+  }
 
   const sql = neon(`${process.env.DATABASE_URL}`);
   await sql("UPDATE decks SET play_count = $1 WHERE id = $2;", [

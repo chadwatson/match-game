@@ -18,6 +18,7 @@ export type DeckRecord = {
   image_urls: string[];
   featured: boolean | null;
   play_count: number | null;
+  visibility: "public" | "private" | "unlisted" | null;
 };
 
 export type UserRecord = {
