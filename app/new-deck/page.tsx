@@ -25,5 +25,7 @@ export default async function NewDeckPage() {
   if (result[0]) {
     const deck = result[0] as DeckRecord;
     redirect(`/decks/${deck.id}/edit`);
+  } else {
+    redirect("/");
   }
 }
