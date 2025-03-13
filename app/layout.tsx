@@ -11,6 +11,8 @@ import "./globals.css";
 import MakeCustomDeckButton from "./components/make-custom-deck-button";
 import Link from "next/link";
 import Button from "./components/button";
+import Image from "next/image";
+import logo from "./logo.png";
 
 export const metadata: Metadata = {
   title: "Match & Match",
@@ -26,10 +28,10 @@ export default async function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body className="antialiased">
-          <header className="flex justify-between items-center p-4 h-16">
-            <h1 className="font-bold text-lg">
-              <Link href="/">Match & Match</Link>
-            </h1>
+          <header className="flex justify-between items-center px-4 py-2 h-16">
+            <Link href="/" title="Match & Match">
+              <Image src={logo} alt="Match & Match" className="size-14" />
+            </Link>
             <div className="flex justify-end items-center gap-2">
               <MakeCustomDeckButton />
               <SignedOut>
