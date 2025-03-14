@@ -4,6 +4,7 @@ import GameOptionCard from "./components/game-option-card";
 import { clerkClient } from "@clerk/nextjs/server";
 import { ReactNode } from "react";
 import { fetchUserInfo, UserInfo } from "./lib/user";
+import Link from "next/link";
 
 async function fetchFeaturedGames() {
   const sql = neon(`${process.env.DATABASE_URL}`);
@@ -76,15 +77,25 @@ export default async function Home() {
   const featuredGames = await fetchFeaturedGames();
 
   return (
-    <div className="w-full py-4 px-4">
-      <div className="max-w-3xl mx-auto">
-        <GameList
-          title={<>Featured ⭐️</>}
-          games={featuredGames}
-          userInfo={userInfo}
-        />
-        {!!userInfo.clerkUser && <YourDecksSection />}
+    <>
+      <div className="w-full py-4 px-4">
+        <div className="max-w-3xl mx-auto">
+          <GameList
+            title={<>Featured ⭐️</>}
+            games={featuredGames}
+            userInfo={userInfo}
+          />
+          {!!userInfo.clerkUser && <YourDecksSection />}
+        </div>
       </div>
-    </div>
+      <footer className="w-full py-2 px-4">
+        <div className="max-w-3xl mx-auto w-full flex items-center justify-center text-gray-600 dark:text-gray-400 text-xs">
+          <div className="mr-6">&copy; 2025 Chad Watson</div>
+          <div>
+            <Link href="/privacy">Privacy Policy</Link>
+          </div>
+        </div>
+      </footer>
+    </>
   );
 }
