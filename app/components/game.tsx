@@ -1,5 +1,11 @@
 "use client";
-import { Suspense, useCallback, useEffect, useState } from "react";
+import {
+  Suspense,
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useState,
+} from "react";
 import * as set from "@/app/lib/set";
 import { GameDifficulty } from "@/app/lib/types";
 import { ArrowPathIcon, CheckIcon } from "@heroicons/react/24/outline";
@@ -75,6 +81,15 @@ export default function Game({
     setGuesses(new Set());
     setCurrentPlayer((currentPlayer) => (currentPlayer === 1 ? 2 : 1));
   }, [setGuesses, setCurrentPlayer]);
+
+  useLayoutEffect(() => {
+    if (!document.body.classList.contains("overflow-hidden")) {
+      document.body.classList.add("overflow-hidden");
+      return () => {
+        document.body.classList.remove("overflow-hidden");
+      };
+    }
+  }, []);
 
   useEffect(() => {
     cards.forEach(preloadImage);
