@@ -7,8 +7,8 @@ export default function manifest(): MetadataRoute.Manifest {
     description: "A matching game!",
     start_url: "/",
     display: "standalone",
-    theme_color: "#6d28d9",
-    background_color: "111827",
+    theme_color: "#111827",
+    background_color: "#111827",
     icons: [
       {
         src: "/web-app-manifest-192x192.png",
