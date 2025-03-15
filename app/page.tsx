@@ -23,7 +23,11 @@ async function fetchGameOwner(deck: DeckRecord) {
 
   const user = results[0] as UserRecord;
   const client = await clerkClient();
-  return await client.users.getUser(user.clerk_user_id);
+  try {
+    return await client.users.getUser(user.clerk_user_id);
+  } catch {
+    return null;
+  }
 }
 
 function GameList(props: {
